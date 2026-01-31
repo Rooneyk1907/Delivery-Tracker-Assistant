@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 import colors from '@/constants/Colors';
 
 export default function RootLayout() {
-  console.log(colors.dark);
   
   return (
     <View style={styles.appBase}>
