@@ -14,4 +14,5 @@ export interface ActiveOrder {
         toCustomer: number;
         returnToHotspot: number;
     }
+    totalDuration: string;
 }

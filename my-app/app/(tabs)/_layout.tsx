@@ -64,8 +64,8 @@ function TabButton ({ accessibilityState, onPress, label, icon, iconOutline, ...
 const styles = StyleSheet.create({
     tabBar: {
         position: 'absolute',
-        left: 16,
-        right: 16,
+        left: 15,
+        right: 15,
         bottom: 16,
         height: 66,
         borderRadius: 18,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 0.15,
         shadowRadius: 10,
-        paddingHorizontal: 8
+        paddingHorizontal: 12
     },
 
     tabButton: {

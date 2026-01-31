@@ -7,9 +7,12 @@ export default function RootLayout() {
   
   return (
     <View style={styles.appBase}>
-          <Stack screenOptions={{ headerShown: false,
-                                  contentStyle: { backgroundColor: styles.appBase.backgroundColor }
-                                  }} />
+      <Stack 
+        screenOptions={{ 
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.dark }
+          }} 
+          />
     </View>
   );
 }
@@ -17,12 +20,8 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   appBase: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    alignContent: 'center',
     margin: 0,
     padding: 15,
-    paddingBottom: 70,
     backgroundColor: colors.dark,
     fontFamily: 'sans-serif',
   }
