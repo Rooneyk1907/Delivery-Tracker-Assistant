@@ -8,14 +8,14 @@ import MileageInput from '@/components/mileageInput';
 import colors from '@/constants/Colors';
 
 import { useOrderEntryStorage } from '@/hooks/useOrderEntryStorage';
-import useOrdersStorage from '@/hooks/useOrdersStorage';
+import { addOrder } from '@/hooks/useOrdersStorage';
 import { ActiveOrder } from '@/types/order';
 
 const SERVICES = ['GrubHub', 'DoorDash', 'UberEats'];
 
 export default function OrderEntry() {
     const { loadDraft, saveDraft, clearDraft } = useOrderEntryStorage();
-    const { addOrder } = useOrdersStorage();
+    // const { addOrder } = useOrdersStorage();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [selectedService, setSelectedService] = useState('GrubHub');
@@ -63,13 +63,25 @@ export default function OrderEntry() {
         return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
     }
 
+    
+
     async function handleSaveOrder() {
+        const pay = parseFloat(tripPay)
+        const miles = parseFloat(tripMiles)
+        const [ minutes, seconds] = tripDuration.split(':').map(Number)
+        const totalDuration =  (minutes / 60) + (seconds / 360);
+
+        const estNetPay = pay - (miles * 0.67)
+
+        const grossHourlyPay = pay / totalDuration;
+        const netHourlyPay = estNetPay / totalDuration;
+
         const order: ActiveOrder = {
             date: tripDate.toISOString().slice(0, 10),
             service: selectedService as 'GrubHub' | 'DoorDash' | 'UberEats',
             restaurant: tripRestaurant,
-            pay: parseFloat(tripPay) || 0,
-            miles: parseFloat(tripMiles) || 0,
+            pay: pay || 0,
+            miles: miles || 0,
             startTime: formatTime(tripTime),
             restArrivalTime: '',
             restDepartureTime: '',
@@ -81,12 +93,19 @@ export default function OrderEntry() {
                 returnToHotspot: 0,
             },
             totalDuration: tripDuration,
+            grossHourlyPay: grossHourlyPay,
+            netHourlyPay: netHourlyPay,
         };
 
         try {
-            await addOrder(order);
-            await clearDraft();
-            // can clear local state here
+            addOrder(order);
+            clearDraft();
+            setTripDate(now);
+            setTripTime(now);
+            setTripPay('');
+            setTripMiles('');
+            onChangeText('');
+            setTripDuration('')
         } catch (error) {
             console.error('Failed to save order', error);
         }
@@ -181,7 +200,7 @@ export default function OrderEntry() {
                         setTripDuration(formatted);
                     }}
                     placeholder="HH:MM"
-                    keyboardType="decimal-pad"
+                    
                     />
            </View>
 

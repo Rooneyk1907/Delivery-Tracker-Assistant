@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import colors from '@/constants/Colors';
-import useOrdersStorage, { StoredOrder } from '@/hooks/useOrdersStorage';
+import { getOrders, StoredOrder } from '@/hooks/useOrdersStorage';
 
 const COST_PER_MILE = 0.67;
 
@@ -74,7 +75,7 @@ function formatIdleTime(mins: number): string {
 }
 
 export default function Index() {
-  const { getOrders } = useOrdersStorage();
+  // const { getOrders } = useOrdersStorage();
   const [loading, setLoading] = useState(true);
   const [metrics, setMetrics] = useState({
     totalGross: 0,

@@ -11,6 +11,8 @@ export interface ActiveTrackingState {
   phase: 'toRestaurant' | 'waiting' | 'toCustomer' | 'returnedToHotspot';
   startMs: number;
   phaseStartMs: number;
+  grossHourlyPay: number;
+  netHourlyPay: number;
 }
 
 export default function useActiveTracking() {

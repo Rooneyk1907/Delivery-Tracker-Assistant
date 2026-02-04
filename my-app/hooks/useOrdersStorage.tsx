@@ -31,7 +31,7 @@ async function saveOrders(orders: StoredOrder[]) {
     }
 }
 
-export default function useOrdersStorage() {
+// export default function useOrdersStorage() {
     async function addOrder(order: ActiveOrder): Promise<StoredOrder> {
         const stored: StoredOrder = {
             ...order,
@@ -44,6 +44,7 @@ export default function useOrdersStorage() {
         await saveOrders(all);
         return stored;
     }
+    
 
     async function getOrders(): Promise<StoredOrder[]> {
         return await loadOrders();
@@ -78,5 +79,5 @@ export default function useOrdersStorage() {
         return updated;
     }
 
-    return { addOrder, getOrders, getOrder, removeOrder, clearAll, updateOrder }
-}
+export { addOrder, clearAll, getOrder, getOrders, removeOrder, updateOrder };
+

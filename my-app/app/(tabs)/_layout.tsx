@@ -8,9 +8,18 @@ export default function TabLayout() {
     return(
         <Tabs
             screenOptions={{
-                tabBarStyle: styles.tabBar,
                 tabBarShowLabel: false,
                 headerShown: false,
+                tabBarStyle: {
+                    position: 'absolute',
+                    left: 15,
+                    right: 15,
+                    bottom: 16,
+                    height: 66,
+                    borderRadius: 18,
+                    elevation: 8,
+                    paddingTop: 10,
+                }
             }}
             >
             <Tabs.Screen 
@@ -63,25 +72,26 @@ function TabButton ({ accessibilityState, onPress, label, icon, iconOutline, ...
 
 const styles = StyleSheet.create({
     tabBar: {
-        position: 'absolute',
-        left: 15,
-        right: 15,
-        bottom: 16,
-        height: 66,
-        borderRadius: 18,
-        backgroundColor: colors.dark,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
+        // position: 'absolute',
+        // left: 15,
+        // right: 15,
+        // bottom: 16,
+        // height: 66,
+        // borderRadius: 18,
+        // backgroundColor: colors.dark,
+        // flexDirection: 'row',
+        // justifyContent: 'space-around',
         alignItems: 'center',
-        borderTopWidth: 0,
-        elevation: 8,
+        // borderTopWidth: 0,
+        // elevation: 8,
         shadowColor: '#000',
         shadowOpacity: 0.15,
-        shadowRadius: 10,
-        paddingHorizontal: 12
+        // shadowRadius: 10,
+        // paddingHorizontal: 12
     },
 
     tabButton: {
+        flex: 1,
         paddingVertical: 8,
         paddingHorizontal: 14,
         borderRadius: 12,

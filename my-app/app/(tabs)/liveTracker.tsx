@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,7 +13,7 @@ import CurrencyInput from '@/components/currencyInput';
 import MileageInput from '@/components/mileageInput';
 import colors from '@/constants/Colors';
 import useActiveTracking from '@/hooks/useActiveTracking';
-import useOrdersStorage from '@/hooks/useOrdersStorage';
+import { addOrder, getOrder, updateOrder } from '@/hooks/useOrdersStorage';
 import { ActiveOrder } from '@/types/order';
 
 const SERVICES = ['GrubHub', 'DoorDash', 'UberEats'];
@@ -22,8 +22,8 @@ function formatTimeHHMM(d: Date) {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
-function minutesBetween(msStart: number, msEnd: number) {
-    return Math.round((msEnd - msStart) / 60000);
+function secondsBetween(msStart: number, msEnd: number) {
+    return Math.round((msEnd - msStart) / 1000);
 }
 
 function formatElapsed(ms: number) {
@@ -44,9 +44,18 @@ function calculateHourlyGross(payAmount: number, elapsedMs: number): number {
   return payAmount / hours;
 }
 
+function calculateHourlyNet(payAmount: number, miles: number, elapsedMs: number): number {
+  if (elapsedMs === 0) return 0;
+  const hours = elapsedMs / (1000 * 60 * 60);
+  const estimatedDeduction = miles * 0.67;
+
+  const estimatedNet = payAmount - estimatedDeduction;
+
+  return estimatedNet / hours;
+}
 
 export default function LiveTracker() {
-  const { addOrder, updateOrder, getOrder } = useOrdersStorage();
+  // const { addOrder, updateOrder, getOrder } = useOrdersStorage();
   const { saveTracking, loadTracking, clearTracking } = useActiveTracking();
 
   const todayDate = new Date().toISOString().slice(0, 10);
@@ -56,6 +65,7 @@ export default function LiveTracker() {
   const [miles, setMiles] = useState<string>('');
 
   const [hourlyGross, setHourlyGross] = useState<number>(0);
+  const [hourlyNet, setHourlyNet] = useState<number>(0);
 
   const [phase, setPhase] = useState<'idle' | 'toRestaurant' | 'waiting' | 'toCustomer' | 'returnedToHotspot'>('idle');
   const [phaseStartMs, setPhaseStartMs] = useState<number | null>(null);
@@ -72,10 +82,12 @@ export default function LiveTracker() {
   useEffect(() => {
     if (startMs && pay) {
         const payNum = parseFloat(pay) || 0;
+        const orderMiles = parseFloat(miles) || 0;
         const elapsed = Date.now() - startMs;
         setHourlyGross(calculateHourlyGross(payNum, elapsed));
+        setHourlyNet(calculateHourlyNet(payNum, orderMiles, elapsed))
     }
-  }, [elapsedDisplay, pay, startMs]);
+  }, [elapsedDisplay, pay, miles, startMs]);
 
   // Load active tracking on mount
   useEffect(() => {
@@ -125,6 +137,8 @@ export default function LiveTracker() {
         phase: phase as 'toRestaurant' | 'waiting' | 'toCustomer' | 'returnedToHotspot',
         startMs,
         phaseStartMs,
+        grossHourlyPay: hourlyGross,
+        netHourlyPay: hourlyNet,
       });
     }
   }, [phase, startMs, phaseStartMs, storedOrderId, service, restaurant, pay, miles]);
@@ -150,6 +164,8 @@ export default function LiveTracker() {
         returnToHotspot: 0,
       },
       totalDuration: '',
+      grossHourlyPay: 0,
+      netHourlyPay: 0,
     };
 
     const stored = await addOrder(baseOrder);
@@ -166,15 +182,15 @@ export default function LiveTracker() {
     startInterval();
   }
 
-  async function updateSegmentMinutes(segmentKey: keyof ActiveOrder['segments'], minutes: number) {
+  async function updateSegmentSeconds(segmentKey: keyof ActiveOrder['segments'], seconds: number) {
     if (!storedOrderId) return;
     try {
       const existing = await getOrder(storedOrderId);
       const prevSegments = existing?.segments ?? { toRestaurant: 0, atRestaurant: 0, toCustomer: 0, returnToHotspot: 0 };
-      const updatedSegments = { ...prevSegments, [segmentKey]: minutes };
+      const updatedSegments = { ...prevSegments, [segmentKey]: seconds };
       await updateOrder(storedOrderId, { segments: updatedSegments } as any);
     } catch (err) {
-      console.error('updateSegmentMinutes failed', err);
+      console.error('updateSegmentSeconds failed', err);
     }
   }
 
@@ -185,8 +201,8 @@ export default function LiveTracker() {
   async function handleArriveAtRestaurant() {
     if (!startMs || !phaseStartMs) return;
     const now = Date.now();
-    const minutes = minutesBetween(startMs, now);
-    await updateSegmentMinutes('toRestaurant', minutes);
+    const seconds = secondsBetween(startMs, now);
+    await updateSegmentSeconds('toRestaurant', seconds);
     await updateOrder(storedOrderId!, { restArrivalTime: formatTimeHHMM(new Date(now)) } as any);
     setPhase('waiting');
     setPhaseStartMs(now);
@@ -198,8 +214,8 @@ export default function LiveTracker() {
   async function handleDepartRestaurant() {
     if (!phaseStartMs) return;
     const now = Date.now();
-    const minutes = minutesBetween(phaseStartMs, now);
-    await updateSegmentMinutes('atRestaurant', minutes);
+    const seconds = secondsBetween(phaseStartMs, now);
+    await updateSegmentSeconds('atRestaurant', seconds);
     await updateOrder(storedOrderId!, { restDepartureTime: formatTimeHHMM(new Date(now)) } as any);
     setPhase('toCustomer');
     setPhaseStartMs(now);
@@ -211,9 +227,13 @@ export default function LiveTracker() {
   async function handleOrderDelivered() {
     if (!phaseStartMs) return;
     const now = Date.now();
-    const minutes = minutesBetween(phaseStartMs, now);
-    await updateSegmentMinutes('toCustomer', minutes);
-    await updateOrder(storedOrderId!, { deliveryTime: formatTimeHHMM(new Date(now)) } as any);
+    const seconds = secondsBetween(phaseStartMs, now);
+    await updateSegmentSeconds('toCustomer', seconds);
+    await updateOrder(storedOrderId!, { 
+      deliveryTime: formatTimeHHMM(new Date(now)),
+      grossHourlyPay: hourlyGross,
+      netHourlyPay: hourlyNet,
+     } as any);
     setPhase('returnedToHotspot');
     setPhaseStartMs(now);
     phaseStartMsRef.current = now;
@@ -224,15 +244,20 @@ export default function LiveTracker() {
   async function handleReturnToHotspot() {
     if (!phaseStartMs) return;
     const now = Date.now();
-    const minutes = minutesBetween(phaseStartMs, now);
-    await updateSegmentMinutes('returnToHotspot', minutes);
+    const seconds = secondsBetween(phaseStartMs, now);
+    await updateSegmentSeconds('returnToHotspot', seconds);
     if (startMs) {
       const totalMs = now - startMs;
       const hh = Math.floor(totalMs / 3600000).toString().padStart(2, '0');
       const mm = Math.floor((totalMs % 3600000) / 60000).toString().padStart(2, '0');
       const ss = Math.floor((totalMs % 60000) / 1000).toString().padStart(2, '0');
-      await updateOrder(storedOrderId!, { totalDuration: `${hh}:${mm}:${ss}` } as any);
+      await updateOrder(storedOrderId!, { 
+        totalDuration: `${hh}:${mm}:${ss}`,
+        grossHourlyPay: hourlyGross,
+        netHourlyPay: hourlyNet 
+      } as any);
     }
+
     setPhase('idle');
     setPhaseStartMs(null);
     phaseStartMsRef.current = null;
@@ -348,6 +373,8 @@ export default function LiveTracker() {
                 <Text style={[styles.elapsed, { fontSize: 18, color: colors.success }]}>
                   ${hourlyGross.toFixed(2)}/hr
                 </Text>
+                <Text>Net Hourly</Text>
+                <Text>${hourlyNet.toFixed(2)}</Text>
               </>)}
 
             <Text style={[styles.statusLabel, { marginTop: 6 }]}>Current phase</Text>
