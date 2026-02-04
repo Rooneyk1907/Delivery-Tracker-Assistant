@@ -15,4 +15,6 @@ export interface ActiveOrder {
         returnToHotspot: number;
     }
     totalDuration: string;
+    grossHourlyPay: number;
+    netHourlyPay: number;
 }
