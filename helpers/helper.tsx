@@ -76,13 +76,12 @@ function orderNet(order: Order): number {
     return Number(order?.pay?.gross ?? 0) - Number(order?.miles ?? 0) * 0.67;
  }
 
-export function calculateDayTotals(shifts: Shift[], orders: Order[]):
-{
+export function calculateDayTotals(shifts: Shift[], orders: Order[]): {
     totalTime: string;
     activeTime: string;
     idleTime: string;
-    totalPay: TotalPay;
-} {
+    totalPay: TotalPay;} 
+    {
     const totalShiftSeconds = shifts.reduce((sum, s) => sum + parseDurationToSeconds(s.duration), 0);
     const activeSeconds = orders.reduce((sum, o) => sum + parseDurationToSeconds(o.totalDuration), 0);
     const idleSeconds = Math.max(totalShiftSeconds - activeSeconds, 0);
@@ -108,7 +107,7 @@ export function calculateDayTotals(shifts: Shift[], orders: Order[]):
     }
 }
 
-function parseTimeToMinutes(value: string): number {
+export function parseTimeToMinutes(value: string): number {
     const trimmed = value.trim();
 
      // 24h: HH:MM

@@ -8,17 +8,17 @@ export default function TabLayout() {
     return(
         <Tabs
             screenOptions={{
-                tabBarShowLabel: false,
+                // tabBarShowLabel: false,
                 headerShown: false,
                 tabBarStyle: {
-                    position: 'absolute',
-                    left: 15,
-                    right: 15,
-                    bottom: 16,
-                    height: 66,
-                    borderRadius: 18,
-                    elevation: 8,
-                    paddingTop: 10,
+                    // position: 'absolute',
+                    // left: 15,
+                    // right: 15,
+                    // bottom: 16,
+                    // height: 66,
+                    // borderRadius: 18,
+                    // elevation: 9,
+                    // paddingTop: 10,
                 }
             }}
             >
@@ -28,24 +28,13 @@ export default function TabLayout() {
                     title: 'Dashboard',
                     tabBarButton: (props) => <TabButton {...props} label="Dashboard" icon="stats-chart" iconOutline="stats-chart-outline" />,
                 }}/>
-                {/* <Tabs.Screen
-                    name="clockInOut"
-                    options={{
-                        title: 'Clock In/Out',
-                        tabBarButton: (props) => <TabButton {...props} label="Clock In/Out" icon="clock-outline"  />
-                    }} /> */}
-            <Tabs.Screen 
+            <Tabs.Screen
                 name="liveTracker"
                 options={{
                     title: 'Live Tracker',
                     tabBarButton: (props) => <TabButton {...props} label="Live" icon="location" iconOutline="location-outline" />
                 }}/>
-            <Tabs.Screen 
-                name="manualEntry"
-                options={{
-                    title: "Manual Entry",
-                    tabBarButton: (props) => <TabButton {...props} label="Manual" icon="create" iconOutline="create-outline" />
-                }}/>
+
             <Tabs.Screen
                 name="history"
                 options={{
@@ -55,6 +44,7 @@ export default function TabLayout() {
         </Tabs>
     );
 }
+
 
 function TabButton ({ accessibilityState, onPress, label, icon, iconOutline, ...rest}: any) {
     const focused = accessibilityState?.selected;

@@ -1,7 +1,7 @@
 export default interface Order {
     id: string;
     date: string;
-    service: 'GrubHub' | 'DoorDash' | 'UberEats';
+    service: string;
     restaurant: string;
     miles: number;
     timestamps: Timestamps;
@@ -31,5 +31,5 @@ export interface Pay {
     gross: number;
     net: number;
     grossHourly: number;
-    grossNet: number;
+    netHourly: number;
 }

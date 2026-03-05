@@ -22,6 +22,6 @@ export interface TotalPay {
 
 export interface Shift {
     clockInTime: string; // Readable HH:MM
-    clockOutTime: string;
-    duration: string;
+    clockOutTime: string; // HH:MM 12/24h format
+    duration: number; // in seconds
 }

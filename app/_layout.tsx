@@ -1,9 +1,14 @@
 import { Stack } from "expo-router";
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import colors from '@/constants/Colors';
+import { seedWorkDaysFromSample } from '@/hooks/useStorage';
 
 export default function RootLayout() {
+  useEffect(() => {
+    seedWorkDaysFromSample({force: true});
+  }, []);
   
   return (
     <View style={styles.appBase}>

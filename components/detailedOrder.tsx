@@ -1,4 +1,4 @@
-import { StoredOrder } from '@/hooks/useOrdersStorage';
+import { StoredOrder } from '@/hooks/useStorage';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -6,7 +6,7 @@ import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import colors from '@/constants/Colors';
 
-export default function DetailedOrder({visible, item, onPress, handleDelete}: { visible: boolean; item: StoredOrder | null, onPress: () => void, handleDelete: (item: StoredOrder) => void}) {
+export default function DetailedOrder({visible, item, onPress}: { visible: boolean; item: StoredOrder | null, onPress: () => void}) {
 
     // const { removeOrder } = useOrdersStorage();
     
@@ -78,7 +78,7 @@ export default function DetailedOrder({visible, item, onPress, handleDelete}: { 
                         style={{marginBottom: 4}}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => handleDelete(item)}>
+                    <TouchableOpacity>
                         <Ionicons 
                             name='trash-outline'
                             size={20}
@@ -93,7 +93,7 @@ export default function DetailedOrder({visible, item, onPress, handleDelete}: { 
                         <Text style={styles.detailLabel}>Date</Text>
                         <Text style={styles.detailValue}>{item.date}</Text>
                         <Text style={styles.detailLabel}>Pay</Text>
-                        <Text style={styles.detailValue}>$ {(item.pay).toFixed(2)}</Text>
+                        <Text style={styles.detailValue}>$ {(item.pay.gross).toFixed(2)}</Text>
                         <Text style={styles.detailLabel}>Miles</Text>
                         <Text style={styles.detailValue}>{item.miles.toFixed(1)}</Text>
                     </View>
@@ -125,14 +125,14 @@ export default function DetailedOrder({visible, item, onPress, handleDelete}: { 
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>Gross Hourly Pay</Text>
                         <Text style={styles.detailValue}>$ 
-                            {(item.grossHourlyPay).toFixed(2)}
+                            {(item.pay.grossHourly).toFixed(2)}
                             {/* {calculateGrossHourly(item.pay, item.totalDuration)} */}
                              /hr</Text>
                     </View>
                     <View style={styles.detailRow}>
                         <Text style={styles.detailLabel}>Estimated Net Hourly Pay</Text>
                         <Text style={styles.detailValue}>$ 
-                            {(item.netHourlyPay).toFixed(2)}
+                            {(item.pay.netHourly).toFixed(2)}
                             {/* {calculateNetHourly(item.pay, item.miles, item.totalDuration)} */}
                              /hr</Text>
                     </View>

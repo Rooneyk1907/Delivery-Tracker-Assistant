@@ -1,5 +1,5 @@
  
-import { StoredOrder } from '@/hooks/useOrdersStorage';
+import { StoredOrder } from '@/hooks/useStorage';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import colors from '@/constants/Colors';
@@ -27,7 +27,7 @@ export default function orderDisplay({ item, onPress }: { item: StoredOrder; onP
                             Pay
                         </Text>
                         <Text style={styles.detailValue}>
-                        $ {item.pay.toFixed(2)}
+                        $ {item.pay.gross.toFixed(2)}
                         </Text>
                     </View>
                     <View style={styles.detailRow}>

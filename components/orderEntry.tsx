@@ -7,25 +7,26 @@ import DatePicker from '@/components/datePicker';
 import MileageInput from '@/components/mileageInput';
 import colors from '@/constants/Colors';
 
-// import { useOrderEntryStorage } from '@/hooks/useOrderEntryStorage';
-// import { addOrder } from '@/hooks/useOrdersStorage';
-// import useActiveDayTracking from '@/hooks/useActiveDayTracking';
+import Order from '@/types/order'
+import {manualOrderEntry, workDay} from '@/hooks/useStorage';
 
-import ActiveOrder from '@/types/order'
+import {generateId, formatTimeHHMM, parseDurationToSeconds} from '@/helpers/helper';
 
 const SERVICES = ['GrubHub', 'DoorDash', 'UberEats'];
 
 
 export default function OrderEntry() {
-    // const { loadDraft, saveDraft, clearDraft } = useOrderEntryStorage();
-    // const { addOrderToDayByDate } = useActiveDayTracking();
-    // const { addOrder } = useOrdersStorage();
+    const orderEntryStore = manualOrderEntry()
+    const workDayStore = workDay()
+
+    const {loadDraft, saveDraft, clearDraft} = orderEntryStore;
+    const {getWorkDay, update} = workDayStore;
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [selectedService, setSelectedService] = useState('GrubHub');
-
+    
     const now = new Date()
-
+    
+    const [selectedService, setSelectedService] = useState('GrubHub');
     const [tripDate, setTripDate] = useState<Date>(now);
     const [tripTime, setTripTime] = useState<Date>(now);
     const [tripPay, setTripPay] = useState('');
@@ -35,38 +36,33 @@ export default function OrderEntry() {
 
 
     // Load draft on mount
-    // useEffect(() => {
-    //     (async () => {
-    //         const draft = await loadDraft();
-    //         if(draft) {
-    //             setSelectedService(draft.selectedService);
-    //             setTripDate(new Date(draft.tripDate));
-    //             setTripTime(new Date(draft.tripTime));
-    //             setTripPay(draft.tripPay);
-    //             setTripMiles(draft.tripMiles);
-    //             onChangeText(draft.tripRestaurant);
-    //             setTripDuration(draft.tripDuration);
-    //         }
-    //     }) ();
-    // }, [clearDraft]);
+    useEffect(() => {
+        (async () => {
+            const draft = await loadDraft();
+            if(draft) {
+                setSelectedService(draft.selectedService);
+                setTripDate(new Date(draft.tripDate));
+                setTripTime(new Date(draft.tripTime));
+                setTripPay(draft.tripPay);
+                setTripMiles(draft.tripMiles);
+                onChangeText(draft.tripRestaurant);
+                setTripDuration(draft.tripDuration);
+            }
+        }) ();
+    }, [clearDraft]);
 
     // Save to Storage whenever state changes
-    // useEffect(() => {
-    //     saveDraft({
-    //         selectedService,
-    //         tripDate: tripDate.toISOString(),
-    //         tripTime: tripTime.toISOString(),
-    //         tripPay,
-    //         tripMiles,
-    //         tripRestaurant,
-    //         tripDuration,
-    //     });
-    // }, [selectedService, tripDate, tripTime, tripPay, tripMiles, tripRestaurant, tripDuration])
-
-    function formatTime(d: Date) {
-        return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})
-    }
-
+    useEffect(() => {
+        saveDraft({
+            selectedService,
+            tripDate: tripDate.toISOString(),
+            tripTime: tripTime.toISOString(),
+            tripPay,
+            tripMiles,
+            tripRestaurant,
+            tripDuration,
+        });
+    }, [selectedService, tripDate, tripTime, tripPay, tripMiles, tripRestaurant, tripDuration])
     
 
     async function handleSaveOrder() {
@@ -81,26 +77,35 @@ export default function OrderEntry() {
         const grossHourlyPay = pay / totalDurationHours;
         const netHourlyPay = estNetPay / totalDurationHours;
 
-        // const order: ActiveOrder = {
-        //     date: tripDate.toISOString().slice(0, 10),
-        //     service: selectedService as 'GrubHub' | 'DoorDash' | 'UberEats',
-        //     restaurant: tripRestaurant,
-        //     pay,
-        //     miles,
-        //     startTime: formatTime(tripTime),
-        //     restArrivalTime: '',
-        //     restDepartureTime: '',
-        //     deliveryTime: '',
-        //     segments: {
-        //         toRestaurant: 0,
-        //         atRestaurant: 0,
-        //         toCustomer: 0,
-        //         returnToHotspot: 0,
-        //     },
-        //     totalDuration: tripDuration,
-        //     grossHourlyPay,
-        //     netHourlyPay,
-        // };
+        const order: Order = {
+            id: generateId(),
+            date: tripDate.toISOString().slice(0, 10),
+            service: selectedService as 'GrubHub' | 'DoorDash' | 'UberEats',
+            restaurant: tripRestaurant,
+            miles,
+            timestamps: {
+                startTime: formatTimeHHMM(tripTime),
+                restArrivalTime: '',
+                restDepartureTime: '',
+                deliveryTime: '',
+                endDeadheadTime: '',
+            },
+            segments: {
+                toRestaurant: 0,
+                atRestaurant: 0,
+                toCustomer: 0,
+                returnToHotspot: 0,
+            },
+            totalDuration: parseDurationToSeconds(tripDuration),
+            pay: {
+                gross: Number(tripPay),
+                net: Number(tripPay),
+                grossHourly: grossHourlyPay,
+                netHourly: netHourlyPay,
+            },
+            // grossHourlyPay,
+            // netHourlyPay,
+        };
 
         // try {
         //     await addOrder(order);

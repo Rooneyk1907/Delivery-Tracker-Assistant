@@ -1,0 +1,1944 @@
+[
+  {
+    "id": "workDay - 2026-08-15",
+    "date": "2026-08-15",
+    "shifts": [
+      {
+        "clockInTime": "06:35",
+        "clockOutTime": "08:36",
+        "duration": 7260
+      },
+      {
+        "clockInTime": "09:05",
+        "clockOutTime": "12:52",
+        "duration": 13620
+      },
+      {
+        "clockInTime": "13:34",
+        "clockOutTime": "16:34",
+        "duration": 10800
+      }
+    ],
+    "totalTime": "08:48:00",
+    "orders": [
+      {
+        "id": "order-1",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 5.9,
+        "timestamps": {
+          "startTime": "06:49",
+          "restArrivalTime": "06:52",
+          "restDepartureTime": "06:54",
+          "deliveryTime": "06:58",
+          "endDeadheadTime": "07:08"
+        },
+        "segments": {
+          "toRestaurant": 230,
+          "atRestaurant": 157,
+          "toCustomer": 276,
+          "returnToHotspot": 657
+        },
+        "totalDuration": 1320,
+        "pay": {
+          "gross": 19.35,
+          "net": 15.4,
+          "grossHourly": 52.77,
+          "netHourly": 42
+        }
+      },
+      {
+        "id": "order-2",
+        "date": "2026-08-15",
+        "service": "GrubHub",
+        "restaurant": "Whataburger",
+        "miles": 7.9,
+        "timestamps": {
+          "startTime": "07:19",
+          "restArrivalTime": "07:24",
+          "restDepartureTime": "07:29",
+          "deliveryTime": "07:36",
+          "endDeadheadTime": "07:46"
+        },
+        "segments": {
+          "toRestaurant": 318,
+          "atRestaurant": 339,
+          "toCustomer": 424,
+          "returnToHotspot": 659
+        },
+        "totalDuration": 1740,
+        "pay": {
+          "gross": 18.27,
+          "net": 12.98,
+          "grossHourly": 37.8,
+          "netHourly": 26.86
+        }
+      },
+      {
+        "id": "order-3",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Whataburger",
+        "miles": 12.4,
+        "timestamps": {
+          "startTime": "07:52",
+          "restArrivalTime": "07:58",
+          "restDepartureTime": "08:04",
+          "deliveryTime": "08:09",
+          "endDeadheadTime": "08:32"
+        },
+        "segments": {
+          "toRestaurant": 375,
+          "atRestaurant": 400,
+          "toCustomer": 317,
+          "returnToHotspot": 1428
+        },
+        "totalDuration": 2520,
+        "pay": {
+          "gross": 25.01,
+          "net": 16.7,
+          "grossHourly": 35.73,
+          "netHourly": 23.86
+        }
+      },
+      {
+        "id": "order-4",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Whataburger",
+        "miles": 14.1,
+        "timestamps": {
+          "startTime": "09:06",
+          "restArrivalTime": "09:13",
+          "restDepartureTime": "09:18",
+          "deliveryTime": "09:24",
+          "endDeadheadTime": "09:42"
+        },
+        "segments": {
+          "toRestaurant": 464,
+          "atRestaurant": 315,
+          "toCustomer": 377,
+          "returnToHotspot": 1124
+        },
+        "totalDuration": 2280,
+        "pay": {
+          "gross": 21.66,
+          "net": 12.21,
+          "grossHourly": 34.2,
+          "netHourly": 19.28
+        }
+      },
+      {
+        "id": "order-5",
+        "date": "2026-08-15",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 7.2,
+        "timestamps": {
+          "startTime": "09:47",
+          "restArrivalTime": "09:50",
+          "restDepartureTime": "09:58",
+          "deliveryTime": "10:05",
+          "endDeadheadTime": "10:16"
+        },
+        "segments": {
+          "toRestaurant": 220,
+          "atRestaurant": 494,
+          "toCustomer": 468,
+          "returnToHotspot": 678
+        },
+        "totalDuration": 1860,
+        "pay": {
+          "gross": 16.25,
+          "net": 11.43,
+          "grossHourly": 31.45,
+          "netHourly": 22.12
+        }
+      },
+      {
+        "id": "order-6",
+        "date": "2026-08-15",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 6.6,
+        "timestamps": {
+          "startTime": "10:20",
+          "restArrivalTime": "10:23",
+          "restDepartureTime": "10:25",
+          "deliveryTime": "10:32",
+          "endDeadheadTime": "10:38"
+        },
+        "segments": {
+          "toRestaurant": 187,
+          "atRestaurant": 171,
+          "toCustomer": 439,
+          "returnToHotspot": 403
+        },
+        "totalDuration": 1200,
+        "pay": {
+          "gross": 17.11,
+          "net": 12.69,
+          "grossHourly": 51.33,
+          "netHourly": 38.07
+        }
+      },
+      {
+        "id": "order-7",
+        "date": "2026-08-15",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 8.6,
+        "timestamps": {
+          "startTime": "10:45",
+          "restArrivalTime": "10:49",
+          "restDepartureTime": "10:54",
+          "deliveryTime": "11:02",
+          "endDeadheadTime": "11:12"
+        },
+        "segments": {
+          "toRestaurant": 270,
+          "atRestaurant": 327,
+          "toCustomer": 532,
+          "returnToHotspot": 611
+        },
+        "totalDuration": 1740,
+        "pay": {
+          "gross": 20.94,
+          "net": 15.18,
+          "grossHourly": 43.32,
+          "netHourly": 31.41
+        }
+      },
+      {
+        "id": "order-8",
+        "date": "2026-08-15",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 7.4,
+        "timestamps": {
+          "startTime": "11:26",
+          "restArrivalTime": "11:29",
+          "restDepartureTime": "11:33",
+          "deliveryTime": "11:39",
+          "endDeadheadTime": "11:47"
+        },
+        "segments": {
+          "toRestaurant": 224,
+          "atRestaurant": 289,
+          "toCustomer": 403,
+          "returnToHotspot": 524
+        },
+        "totalDuration": 1440,
+        "pay": {
+          "gross": 15.1,
+          "net": 10.14,
+          "grossHourly": 37.75,
+          "netHourly": 25.35
+        }
+      },
+      {
+        "id": "order-9",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "McDonalds",
+        "miles": 11.6,
+        "timestamps": {
+          "startTime": "11:57",
+          "restArrivalTime": "12:00",
+          "restDepartureTime": "12:02",
+          "deliveryTime": "12:11",
+          "endDeadheadTime": "12:25"
+        },
+        "segments": {
+          "toRestaurant": 192,
+          "atRestaurant": 176,
+          "toCustomer": 546,
+          "returnToHotspot": 886
+        },
+        "totalDuration": 1800,
+        "pay": {
+          "gross": 22.32,
+          "net": 14.55,
+          "grossHourly": 44.64,
+          "netHourly": 29.1
+        }
+      },
+      {
+        "id": "order-10",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Whataburger",
+        "miles": 6.8,
+        "timestamps": {
+          "startTime": "13:41",
+          "restArrivalTime": "13:44",
+          "restDepartureTime": "13:48",
+          "deliveryTime": "13:54",
+          "endDeadheadTime": "13:59"
+        },
+        "segments": {
+          "toRestaurant": 221,
+          "atRestaurant": 249,
+          "toCustomer": 360,
+          "returnToHotspot": 310
+        },
+        "totalDuration": 1140,
+        "pay": {
+          "gross": 15.44,
+          "net": 10.88,
+          "grossHourly": 48.76,
+          "netHourly": 34.36
+        }
+      },
+      {
+        "id": "order-11",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 11.8,
+        "timestamps": {
+          "startTime": "14:04",
+          "restArrivalTime": "14:10",
+          "restDepartureTime": "14:12",
+          "deliveryTime": "14:24",
+          "endDeadheadTime": "14:40"
+        },
+        "segments": {
+          "toRestaurant": 392,
+          "atRestaurant": 127,
+          "toCustomer": 726,
+          "returnToHotspot": 975
+        },
+        "totalDuration": 2220,
+        "pay": {
+          "gross": 19.96,
+          "net": 12.05,
+          "grossHourly": 32.37,
+          "netHourly": 19.54
+        }
+      },
+      {
+        "id": "order-12",
+        "date": "2026-08-15",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 11.3,
+        "timestamps": {
+          "startTime": "14:48",
+          "restArrivalTime": "14:54",
+          "restDepartureTime": "14:58",
+          "deliveryTime": "15:04",
+          "endDeadheadTime": "15:18"
+        },
+        "segments": {
+          "toRestaurant": 396,
+          "atRestaurant": 251,
+          "toCustomer": 397,
+          "returnToHotspot": 876
+        },
+        "totalDuration": 1920,
+        "pay": {
+          "gross": 24.92,
+          "net": 17.35,
+          "grossHourly": 46.73,
+          "netHourly": 32.53
+        }
+      },
+      {
+        "id": "order-13",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 6.1,
+        "timestamps": {
+          "startTime": "15:27",
+          "restArrivalTime": "15:29",
+          "restDepartureTime": "15:32",
+          "deliveryTime": "15:36",
+          "endDeadheadTime": "15:45"
+        },
+        "segments": {
+          "toRestaurant": 173,
+          "atRestaurant": 217,
+          "toCustomer": 246,
+          "returnToHotspot": 564
+        },
+        "totalDuration": 1200,
+        "pay": {
+          "gross": 16.46,
+          "net": 12.37,
+          "grossHourly": 49.38,
+          "netHourly": 37.11
+        }
+      },
+      {
+        "id": "order-14",
+        "date": "2026-08-15",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 10.5,
+        "timestamps": {
+          "startTime": "15:51",
+          "restArrivalTime": "15:57",
+          "restDepartureTime": "16:01",
+          "deliveryTime": "16:09",
+          "endDeadheadTime": "16:18"
+        },
+        "segments": {
+          "toRestaurant": 396,
+          "atRestaurant": 291,
+          "toCustomer": 480,
+          "returnToHotspot": 573
+        },
+        "totalDuration": 1740,
+        "pay": {
+          "gross": 23.69,
+          "net": 16.66,
+          "grossHourly": 49.01,
+          "netHourly": 34.47
+        }
+      }
+    ],
+    "activeTime": "06:42:00",
+    "idleTime": "02:06:00",
+    "totalPay": {
+      "gross": 276.48,
+      "net": 190.59,
+      "activeHourlyGross": 41.265671641791045,
+      "activeHourlyNet": 28.446268656716416,
+      "overallHourlyGross": 31.418181818181818,
+      "overallHourlyNet": 21.657954545454544
+    }
+  },
+  {
+    "id": "workDay - 2026-01-02",
+    "date": "2026-01-02",
+    "shifts": [
+      {
+        "clockInTime": "08:38",
+        "clockOutTime": "11:31",
+        "duration": 10380
+      },
+      {
+        "clockInTime": "12:11",
+        "clockOutTime": "15:48",
+        "duration": 13020
+      },
+      {
+        "clockInTime": "16:28",
+        "clockOutTime": "20:25",
+        "duration": 14220
+      }
+    ],
+    "totalTime": "10:27:00",
+    "orders": [
+      {
+        "id": "order-1",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "Chick-fil-A",
+        "miles": 8.7,
+        "timestamps": {
+          "startTime": "08:44",
+          "restArrivalTime": "08:50",
+          "restDepartureTime": "08:54",
+          "deliveryTime": "09:06",
+          "endDeadheadTime": "09:19"
+        },
+        "segments": {
+          "toRestaurant": 374,
+          "atRestaurant": 293,
+          "toCustomer": 755,
+          "returnToHotspot": 798
+        },
+        "totalDuration": 2220,
+        "pay": {
+          "gross": 14.34,
+          "net": 8.51,
+          "grossHourly": 23.25,
+          "netHourly": 13.8
+        }
+      },
+      {
+        "id": "order-2",
+        "date": "2026-01-02",
+        "service": "UberEats",
+        "restaurant": "McDonalds",
+        "miles": 12.9,
+        "timestamps": {
+          "startTime": "09:31",
+          "restArrivalTime": "09:37",
+          "restDepartureTime": "09:42",
+          "deliveryTime": "09:49",
+          "endDeadheadTime": "10:02"
+        },
+        "segments": {
+          "toRestaurant": 410,
+          "atRestaurant": 319,
+          "toCustomer": 452,
+          "returnToHotspot": 799
+        },
+        "totalDuration": 1980,
+        "pay": {
+          "gross": 24.32,
+          "net": 15.68,
+          "grossHourly": 44.22,
+          "netHourly": 28.51
+        }
+      },
+      {
+        "id": "order-3",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 13.3,
+        "timestamps": {
+          "startTime": "10:17",
+          "restArrivalTime": "10:20",
+          "restDepartureTime": "10:25",
+          "deliveryTime": "10:31",
+          "endDeadheadTime": "10:53"
+        },
+        "segments": {
+          "toRestaurant": 206,
+          "atRestaurant": 301,
+          "toCustomer": 380,
+          "returnToHotspot": 1333
+        },
+        "totalDuration": 2220,
+        "pay": {
+          "gross": 25.22,
+          "net": 16.31,
+          "grossHourly": 40.9,
+          "netHourly": 26.45
+        }
+      },
+      {
+        "id": "order-4",
+        "date": "2026-01-02",
+        "service": "UberEats",
+        "restaurant": "McDonalds",
+        "miles": 5,
+        "timestamps": {
+          "startTime": "10:55",
+          "restArrivalTime": "10:57",
+          "restDepartureTime": "10:59",
+          "deliveryTime": "11:04",
+          "endDeadheadTime": "11:11"
+        },
+        "segments": {
+          "toRestaurant": 150,
+          "atRestaurant": 134,
+          "toCustomer": 338,
+          "returnToHotspot": 458
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 15.86,
+          "net": 12.51,
+          "grossHourly": 52.87,
+          "netHourly": 41.7
+        }
+      },
+      {
+        "id": "order-5",
+        "date": "2026-01-02",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 6.4,
+        "timestamps": {
+          "startTime": "11:13",
+          "restArrivalTime": "11:15",
+          "restDepartureTime": "11:18",
+          "deliveryTime": "11:22",
+          "endDeadheadTime": "11:29"
+        },
+        "segments": {
+          "toRestaurant": 137,
+          "atRestaurant": 190,
+          "toCustomer": 284,
+          "returnToHotspot": 469
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 12.9,
+          "net": 8.61,
+          "grossHourly": 43,
+          "netHourly": 28.7
+        }
+      },
+      {
+        "id": "order-6",
+        "date": "2026-01-02",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 8.5,
+        "timestamps": {
+          "startTime": "12:15",
+          "restArrivalTime": "12:21",
+          "restDepartureTime": "12:24",
+          "deliveryTime": "12:29",
+          "endDeadheadTime": "12:44"
+        },
+        "segments": {
+          "toRestaurant": 362,
+          "atRestaurant": 202,
+          "toCustomer": 302,
+          "returnToHotspot": 934
+        },
+        "totalDuration": 1800,
+        "pay": {
+          "gross": 16.09,
+          "net": 10.39,
+          "grossHourly": 32.18,
+          "netHourly": 20.78
+        }
+      },
+      {
+        "id": "order-7",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 13.6,
+        "timestamps": {
+          "startTime": "12:59",
+          "restArrivalTime": "13:03",
+          "restDepartureTime": "13:12",
+          "deliveryTime": "13:25",
+          "endDeadheadTime": "13:37"
+        },
+        "segments": {
+          "toRestaurant": 273,
+          "atRestaurant": 596,
+          "toCustomer": 839,
+          "returnToHotspot": 752
+        },
+        "totalDuration": 2460,
+        "pay": {
+          "gross": 22.04,
+          "net": 12.93,
+          "grossHourly": 32.25,
+          "netHourly": 18.92
+        }
+      },
+      {
+        "id": "order-8",
+        "date": "2026-01-02",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 13.5,
+        "timestamps": {
+          "startTime": "13:49",
+          "restArrivalTime": "13:53",
+          "restDepartureTime": "13:57",
+          "deliveryTime": "14:06",
+          "endDeadheadTime": "14:29"
+        },
+        "segments": {
+          "toRestaurant": 292,
+          "atRestaurant": 240,
+          "toCustomer": 567,
+          "returnToHotspot": 1421
+        },
+        "totalDuration": 2520,
+        "pay": {
+          "gross": 20.92,
+          "net": 11.88,
+          "grossHourly": 29.89,
+          "netHourly": 16.97
+        }
+      },
+      {
+        "id": "order-9",
+        "date": "2026-01-02",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 6.8,
+        "timestamps": {
+          "startTime": "14:42",
+          "restArrivalTime": "14:44",
+          "restDepartureTime": "14:48",
+          "deliveryTime": "14:53",
+          "endDeadheadTime": "14:59"
+        },
+        "segments": {
+          "toRestaurant": 138,
+          "atRestaurant": 260,
+          "toCustomer": 338,
+          "returnToHotspot": 404
+        },
+        "totalDuration": 1140,
+        "pay": {
+          "gross": 13.17,
+          "net": 8.61,
+          "grossHourly": 41.59,
+          "netHourly": 27.19
+        }
+      },
+      {
+        "id": "order-10",
+        "date": "2026-01-02",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 5.7,
+        "timestamps": {
+          "startTime": "15:11",
+          "restArrivalTime": "15:15",
+          "restDepartureTime": "15:19",
+          "deliveryTime": "15:23",
+          "endDeadheadTime": "15:29"
+        },
+        "segments": {
+          "toRestaurant": 246,
+          "atRestaurant": 269,
+          "toCustomer": 243,
+          "returnToHotspot": 382
+        },
+        "totalDuration": 1140,
+        "pay": {
+          "gross": 17.74,
+          "net": 13.92,
+          "grossHourly": 56.02,
+          "netHourly": 43.96
+        }
+      },
+      {
+        "id": "order-11",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "Whataburger",
+        "miles": 5.3,
+        "timestamps": {
+          "startTime": "15:30",
+          "restArrivalTime": "15:32",
+          "restDepartureTime": "15:34",
+          "deliveryTime": "15:39",
+          "endDeadheadTime": "15:45"
+        },
+        "segments": {
+          "toRestaurant": 158,
+          "atRestaurant": 175,
+          "toCustomer": 349,
+          "returnToHotspot": 398
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 15.41,
+          "net": 11.86,
+          "grossHourly": 51.37,
+          "netHourly": 39.53
+        }
+      },
+      {
+        "id": "order-12",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "Chick-fil-A",
+        "miles": 5.3,
+        "timestamps": {
+          "startTime": "16:40",
+          "restArrivalTime": "16:43",
+          "restDepartureTime": "16:45",
+          "deliveryTime": "16:50",
+          "endDeadheadTime": "16:56"
+        },
+        "segments": {
+          "toRestaurant": 215,
+          "atRestaurant": 163,
+          "toCustomer": 349,
+          "returnToHotspot": 413
+        },
+        "totalDuration": 1140,
+        "pay": {
+          "gross": 14.31,
+          "net": 10.76,
+          "grossHourly": 45.19,
+          "netHourly": 33.98
+        }
+      },
+      {
+        "id": "order-13",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 5.6,
+        "timestamps": {
+          "startTime": "17:05",
+          "restArrivalTime": "17:08",
+          "restDepartureTime": "17:12",
+          "deliveryTime": "17:19",
+          "endDeadheadTime": "17:23"
+        },
+        "segments": {
+          "toRestaurant": 226,
+          "atRestaurant": 245,
+          "toCustomer": 435,
+          "returnToHotspot": 294
+        },
+        "totalDuration": 1200,
+        "pay": {
+          "gross": 14.16,
+          "net": 10.41,
+          "grossHourly": 42.48,
+          "netHourly": 31.23
+        }
+      },
+      {
+        "id": "order-14",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "Chick-fil-A",
+        "miles": 11.8,
+        "timestamps": {
+          "startTime": "17:38",
+          "restArrivalTime": "17:44",
+          "restDepartureTime": "17:48",
+          "deliveryTime": "17:56",
+          "endDeadheadTime": "18:15"
+        },
+        "segments": {
+          "toRestaurant": 391,
+          "atRestaurant": 256,
+          "toCustomer": 491,
+          "returnToHotspot": 1142
+        },
+        "totalDuration": 2280,
+        "pay": {
+          "gross": 20.78,
+          "net": 12.87,
+          "grossHourly": 32.81,
+          "netHourly": 20.32
+        }
+      },
+      {
+        "id": "order-15",
+        "date": "2026-01-02",
+        "service": "GrubHub",
+        "restaurant": "Whataburger",
+        "miles": 9.9,
+        "timestamps": {
+          "startTime": "18:29",
+          "restArrivalTime": "18:31",
+          "restDepartureTime": "18:33",
+          "deliveryTime": "18:39",
+          "endDeadheadTime": "18:51"
+        },
+        "segments": {
+          "toRestaurant": 152,
+          "atRestaurant": 129,
+          "toCustomer": 389,
+          "returnToHotspot": 770
+        },
+        "totalDuration": 1440,
+        "pay": {
+          "gross": 13.78,
+          "net": 7.15,
+          "grossHourly": 34.45,
+          "netHourly": 17.88
+        }
+      },
+      {
+        "id": "order-16",
+        "date": "2026-01-02",
+        "service": "DoorDash",
+        "restaurant": "Panda Express",
+        "miles": 8.3,
+        "timestamps": {
+          "startTime": "18:56",
+          "restArrivalTime": "18:58",
+          "restDepartureTime": "19:00",
+          "deliveryTime": "19:08",
+          "endDeadheadTime": "19:27"
+        },
+        "segments": {
+          "toRestaurant": 169,
+          "atRestaurant": 179,
+          "toCustomer": 520,
+          "returnToHotspot": 1172
+        },
+        "totalDuration": 2040,
+        "pay": {
+          "gross": 17.16,
+          "net": 11.6,
+          "grossHourly": 30.28,
+          "netHourly": 20.47
+        }
+      },
+      {
+        "id": "order-17",
+        "date": "2026-01-02",
+        "service": "GrubHub",
+        "restaurant": "Panda Express",
+        "miles": 14.7,
+        "timestamps": {
+          "startTime": "19:32",
+          "restArrivalTime": "19:35",
+          "restDepartureTime": "19:40",
+          "deliveryTime": "19:45",
+          "endDeadheadTime": "20:12"
+        },
+        "segments": {
+          "toRestaurant": 190,
+          "atRestaurant": 352,
+          "toCustomer": 335,
+          "returnToHotspot": 1643
+        },
+        "totalDuration": 2520,
+        "pay": {
+          "gross": 24.04,
+          "net": 14.19,
+          "grossHourly": 34.34,
+          "netHourly": 20.27
+        }
+      }
+    ],
+    "activeTime": "08:09:00",
+    "idleTime": "02:18:00",
+    "totalPay": {
+      "gross": 302.24,
+      "net": 198.18999999999997,
+      "activeHourlyGross": 37.084662576687116,
+      "activeHourlyNet": 24.31779141104294,
+      "overallHourlyGross": 28.922488038277514,
+      "overallHourlyNet": 18.96555023923445
+    }
+  },
+  {
+    "id": "workDay - 2026-05-31",
+    "date": "2026-05-31",
+    "shifts": [
+      {
+        "clockInTime": "07:32",
+        "clockOutTime": "10:03",
+        "duration": 9060
+      },
+      {
+        "clockInTime": "10:42",
+        "clockOutTime": "14:41",
+        "duration": 14340
+      },
+      {
+        "clockInTime": "15:09",
+        "clockOutTime": "18:33",
+        "duration": 12240
+      }
+    ],
+    "totalTime": "09:54:00",
+    "orders": [
+      {
+        "id": "order-1",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Whataburger",
+        "miles": 8.3,
+        "timestamps": {
+          "startTime": "07:40",
+          "restArrivalTime": "07:44",
+          "restDepartureTime": "07:46",
+          "deliveryTime": "07:53",
+          "endDeadheadTime": "08:07"
+        },
+        "segments": {
+          "toRestaurant": 249,
+          "atRestaurant": 176,
+          "toCustomer": 456,
+          "returnToHotspot": 859
+        },
+        "totalDuration": 1740,
+        "pay": {
+          "gross": 17.7,
+          "net": 12.14,
+          "grossHourly": 36.62,
+          "netHourly": 25.12
+        }
+      },
+      {
+        "id": "order-2",
+        "date": "2026-05-31",
+        "service": "UberEats",
+        "restaurant": "Whataburger",
+        "miles": 5.6,
+        "timestamps": {
+          "startTime": "08:14",
+          "restArrivalTime": "08:17",
+          "restDepartureTime": "08:22",
+          "deliveryTime": "08:27",
+          "endDeadheadTime": "08:37"
+        },
+        "segments": {
+          "toRestaurant": 233,
+          "atRestaurant": 345,
+          "toCustomer": 304,
+          "returnToHotspot": 618
+        },
+        "totalDuration": 1500,
+        "pay": {
+          "gross": 13.48,
+          "net": 9.73,
+          "grossHourly": 32.35,
+          "netHourly": 23.35
+        }
+      },
+      {
+        "id": "order-3",
+        "date": "2026-05-31",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 8.7,
+        "timestamps": {
+          "startTime": "08:42",
+          "restArrivalTime": "08:46",
+          "restDepartureTime": "08:49",
+          "deliveryTime": "08:53",
+          "endDeadheadTime": "09:03"
+        },
+        "segments": {
+          "toRestaurant": 279,
+          "atRestaurant": 227,
+          "toCustomer": 276,
+          "returnToHotspot": 658
+        },
+        "totalDuration": 1440,
+        "pay": {
+          "gross": 20.19,
+          "net": 14.36,
+          "grossHourly": 50.48,
+          "netHourly": 35.9
+        }
+      },
+      {
+        "id": "order-4",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Whataburger",
+        "miles": 14.7,
+        "timestamps": {
+          "startTime": "09:15",
+          "restArrivalTime": "09:22",
+          "restDepartureTime": "09:24",
+          "deliveryTime": "09:34",
+          "endDeadheadTime": "09:51"
+        },
+        "segments": {
+          "toRestaurant": 452,
+          "atRestaurant": 158,
+          "toCustomer": 625,
+          "returnToHotspot": 1045
+        },
+        "totalDuration": 2280,
+        "pay": {
+          "gross": 18.65,
+          "net": 8.8,
+          "grossHourly": 29.45,
+          "netHourly": 13.89
+        }
+      },
+      {
+        "id": "order-5",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 8.7,
+        "timestamps": {
+          "startTime": "10:46",
+          "restArrivalTime": "10:51",
+          "restDepartureTime": "10:58",
+          "deliveryTime": "11:04",
+          "endDeadheadTime": "11:21"
+        },
+        "segments": {
+          "toRestaurant": 350,
+          "atRestaurant": 438,
+          "toCustomer": 408,
+          "returnToHotspot": 1024
+        },
+        "totalDuration": 2220,
+        "pay": {
+          "gross": 20.21,
+          "net": 14.38,
+          "grossHourly": 32.77,
+          "netHourly": 23.32
+        }
+      },
+      {
+        "id": "order-6",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 12.2,
+        "timestamps": {
+          "startTime": "11:26",
+          "restArrivalTime": "11:28",
+          "restDepartureTime": "11:34",
+          "deliveryTime": "11:46",
+          "endDeadheadTime": "12:05"
+        },
+        "segments": {
+          "toRestaurant": 150,
+          "atRestaurant": 377,
+          "toCustomer": 778,
+          "returnToHotspot": 1155
+        },
+        "totalDuration": 2460,
+        "pay": {
+          "gross": 24.41,
+          "net": 16.24,
+          "grossHourly": 35.72,
+          "netHourly": 23.77
+        }
+      },
+      {
+        "id": "order-7",
+        "date": "2026-05-31",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 13.9,
+        "timestamps": {
+          "startTime": "12:10",
+          "restArrivalTime": "12:15",
+          "restDepartureTime": "12:17",
+          "deliveryTime": "12:29",
+          "endDeadheadTime": "12:49"
+        },
+        "segments": {
+          "toRestaurant": 358,
+          "atRestaurant": 157,
+          "toCustomer": 748,
+          "returnToHotspot": 1257
+        },
+        "totalDuration": 2520,
+        "pay": {
+          "gross": 28.71,
+          "net": 19.4,
+          "grossHourly": 41.01,
+          "netHourly": 27.71
+        }
+      },
+      {
+        "id": "order-8",
+        "date": "2026-05-31",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 6.9,
+        "timestamps": {
+          "startTime": "12:55",
+          "restArrivalTime": "12:58",
+          "restDepartureTime": "13:03",
+          "deliveryTime": "13:10",
+          "endDeadheadTime": "13:15"
+        },
+        "segments": {
+          "toRestaurant": 203,
+          "atRestaurant": 303,
+          "toCustomer": 444,
+          "returnToHotspot": 310
+        },
+        "totalDuration": 1260,
+        "pay": {
+          "gross": 14.27,
+          "net": 9.65,
+          "grossHourly": 40.77,
+          "netHourly": 27.57
+        }
+      },
+      {
+        "id": "order-9",
+        "date": "2026-05-31",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 5.7,
+        "timestamps": {
+          "startTime": "13:24",
+          "restArrivalTime": "13:26",
+          "restDepartureTime": "13:29",
+          "deliveryTime": "13:34",
+          "endDeadheadTime": "13:40"
+        },
+        "segments": {
+          "toRestaurant": 162,
+          "atRestaurant": 207,
+          "toCustomer": 322,
+          "returnToHotspot": 389
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 13.68,
+          "net": 9.86,
+          "grossHourly": 45.6,
+          "netHourly": 32.87
+        }
+      },
+      {
+        "id": "order-10",
+        "date": "2026-05-31",
+        "service": "DoorDash",
+        "restaurant": "Whataburger",
+        "miles": 8.3,
+        "timestamps": {
+          "startTime": "13:48",
+          "restArrivalTime": "13:53",
+          "restDepartureTime": "13:58",
+          "deliveryTime": "14:02",
+          "endDeadheadTime": "14:17"
+        },
+        "segments": {
+          "toRestaurant": 300,
+          "atRestaurant": 310,
+          "toCustomer": 264,
+          "returnToHotspot": 926
+        },
+        "totalDuration": 1800,
+        "pay": {
+          "gross": 15.63,
+          "net": 10.07,
+          "grossHourly": 31.26,
+          "netHourly": 20.14
+        }
+      },
+      {
+        "id": "order-11",
+        "date": "2026-05-31",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 7.7,
+        "timestamps": {
+          "startTime": "15:22",
+          "restArrivalTime": "15:25",
+          "restDepartureTime": "15:32",
+          "deliveryTime": "15:38",
+          "endDeadheadTime": "15:51"
+        },
+        "segments": {
+          "toRestaurant": 216,
+          "atRestaurant": 431,
+          "toCustomer": 402,
+          "returnToHotspot": 811
+        },
+        "totalDuration": 1860,
+        "pay": {
+          "gross": 13.38,
+          "net": 8.22,
+          "grossHourly": 25.9,
+          "netHourly": 15.91
+        }
+      },
+      {
+        "id": "order-12",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 7.4,
+        "timestamps": {
+          "startTime": "15:57",
+          "restArrivalTime": "16:00",
+          "restDepartureTime": "16:03",
+          "deliveryTime": "16:12",
+          "endDeadheadTime": "16:22"
+        },
+        "segments": {
+          "toRestaurant": 219,
+          "atRestaurant": 201,
+          "toCustomer": 572,
+          "returnToHotspot": 628
+        },
+        "totalDuration": 1620,
+        "pay": {
+          "gross": 15.59,
+          "net": 10.63,
+          "grossHourly": 34.64,
+          "netHourly": 23.62
+        }
+      },
+      {
+        "id": "order-13",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 11,
+        "timestamps": {
+          "startTime": "16:34",
+          "restArrivalTime": "16:38",
+          "restDepartureTime": "16:42",
+          "deliveryTime": "16:53",
+          "endDeadheadTime": "17:06"
+        },
+        "segments": {
+          "toRestaurant": 241,
+          "atRestaurant": 255,
+          "toCustomer": 708,
+          "returnToHotspot": 836
+        },
+        "totalDuration": 2040,
+        "pay": {
+          "gross": 21.44,
+          "net": 14.07,
+          "grossHourly": 37.84,
+          "netHourly": 24.83
+        }
+      },
+      {
+        "id": "order-14",
+        "date": "2026-05-31",
+        "service": "DoorDash",
+        "restaurant": "Chick-fil-A",
+        "miles": 9.6,
+        "timestamps": {
+          "startTime": "17:13",
+          "restArrivalTime": "17:21",
+          "restDepartureTime": "17:27",
+          "deliveryTime": "17:37",
+          "endDeadheadTime": "17:52"
+        },
+        "segments": {
+          "toRestaurant": 508,
+          "atRestaurant": 369,
+          "toCustomer": 634,
+          "returnToHotspot": 949
+        },
+        "totalDuration": 2460,
+        "pay": {
+          "gross": 19.38,
+          "net": 12.95,
+          "grossHourly": 28.36,
+          "netHourly": 18.95
+        }
+      },
+      {
+        "id": "order-15",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Panda Express",
+        "miles": 5.4,
+        "timestamps": {
+          "startTime": "17:56",
+          "restArrivalTime": "17:59",
+          "restDepartureTime": "18:02",
+          "deliveryTime": "18:07",
+          "endDeadheadTime": "18:12"
+        },
+        "segments": {
+          "toRestaurant": 199,
+          "atRestaurant": 224,
+          "toCustomer": 311,
+          "returnToHotspot": 346
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 16.46,
+          "net": 12.84,
+          "grossHourly": 54.87,
+          "netHourly": 42.8
+        }
+      },
+      {
+        "id": "order-16",
+        "date": "2026-05-31",
+        "service": "GrubHub",
+        "restaurant": "Panda Express",
+        "miles": 5.3,
+        "timestamps": {
+          "startTime": "18:14",
+          "restArrivalTime": "18:16",
+          "restDepartureTime": "18:19",
+          "deliveryTime": "18:24",
+          "endDeadheadTime": "18:30"
+        },
+        "segments": {
+          "toRestaurant": 174,
+          "atRestaurant": 231,
+          "toCustomer": 322,
+          "returnToHotspot": 413
+        },
+        "totalDuration": 1140,
+        "pay": {
+          "gross": 13.57,
+          "net": 10.02,
+          "grossHourly": 42.85,
+          "netHourly": 31.64
+        }
+      }
+    ],
+    "activeTime": "07:55:00",
+    "idleTime": "01:59:00",
+    "totalPay": {
+      "gross": 286.75,
+      "net": 193.36,
+      "activeHourlyGross": 36.22105263157895,
+      "activeHourlyNet": 24.42442105263158,
+      "overallHourlyGross": 28.964646464646464,
+      "overallHourlyNet": 19.531313131313134
+    }
+  },
+  {
+    "id": "workDay - 2026-06-01",
+    "date": "2026-06-01",
+    "shifts": [
+      {
+        "clockInTime": "07:45",
+        "clockOutTime": "10:15",
+        "duration": 9000
+      },
+      {
+        "clockInTime": "10:40",
+        "clockOutTime": "12:47",
+        "duration": 7620
+      }
+    ],
+    "totalTime": "04:37:00",
+    "orders": [
+      {
+        "id": "order-1",
+        "date": "2026-06-01",
+        "service": "UberEats",
+        "restaurant": "Panda Express",
+        "miles": 8.6,
+        "timestamps": {
+          "startTime": "07:52",
+          "restArrivalTime": "07:59",
+          "restDepartureTime": "08:07",
+          "deliveryTime": "08:14",
+          "endDeadheadTime": "08:23"
+        },
+        "segments": {
+          "toRestaurant": 462,
+          "atRestaurant": 522,
+          "toCustomer": 436,
+          "returnToHotspot": 560
+        },
+        "totalDuration": 1980,
+        "pay": {
+          "gross": 17.67,
+          "net": 11.91,
+          "grossHourly": 32.13,
+          "netHourly": 21.65
+        }
+      },
+      {
+        "id": "order-2",
+        "date": "2026-06-01",
+        "service": "UberEats",
+        "restaurant": "McDonalds",
+        "miles": 4.7,
+        "timestamps": {
+          "startTime": "08:33",
+          "restArrivalTime": "08:35",
+          "restDepartureTime": "08:37",
+          "deliveryTime": "08:41",
+          "endDeadheadTime": "08:49"
+        },
+        "segments": {
+          "toRestaurant": 136,
+          "atRestaurant": 160,
+          "toCustomer": 269,
+          "returnToHotspot": 515
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 7.6,
+          "net": 4.45,
+          "grossHourly": 25.33,
+          "netHourly": 14.83
+        }
+      },
+      {
+        "id": "order-3",
+        "date": "2026-06-01",
+        "service": "UberEats",
+        "restaurant": "Whataburger",
+        "miles": 9.4,
+        "timestamps": {
+          "startTime": "08:53",
+          "restArrivalTime": "08:59",
+          "restDepartureTime": "09:02",
+          "deliveryTime": "09:07",
+          "endDeadheadTime": "09:20"
+        },
+        "segments": {
+          "toRestaurant": 380,
+          "atRestaurant": 188,
+          "toCustomer": 301,
+          "returnToHotspot": 811
+        },
+        "totalDuration": 1680,
+        "pay": {
+          "gross": 25.33,
+          "net": 19.03,
+          "grossHourly": 54.28,
+          "netHourly": 40.78
+        }
+      },
+      {
+        "id": "order-4",
+        "date": "2026-06-01",
+        "service": "DoorDash",
+        "restaurant": "Whataburger",
+        "miles": 15.7,
+        "timestamps": {
+          "startTime": "09:29",
+          "restArrivalTime": "09:36",
+          "restDepartureTime": "09:41",
+          "deliveryTime": "09:55",
+          "endDeadheadTime": "10:09"
+        },
+        "segments": {
+          "toRestaurant": 424,
+          "atRestaurant": 303,
+          "toCustomer": 881,
+          "returnToHotspot": 852
+        },
+        "totalDuration": 2460,
+        "pay": {
+          "gross": 23.55,
+          "net": 13.03,
+          "grossHourly": 34.46,
+          "netHourly": 19.07
+        }
+      },
+      {
+        "id": "order-5",
+        "date": "2026-06-01",
+        "service": "DoorDash",
+        "restaurant": "Panda Express",
+        "miles": 6.3,
+        "timestamps": {
+          "startTime": "10:46",
+          "restArrivalTime": "10:48",
+          "restDepartureTime": "10:52",
+          "deliveryTime": "11:01",
+          "endDeadheadTime": "11:13"
+        },
+        "segments": {
+          "toRestaurant": 137,
+          "atRestaurant": 265,
+          "toCustomer": 542,
+          "returnToHotspot": 736
+        },
+        "totalDuration": 1680,
+        "pay": {
+          "gross": 15.56,
+          "net": 11.34,
+          "grossHourly": 33.34,
+          "netHourly": 24.3
+        }
+      },
+      {
+        "id": "order-6",
+        "date": "2026-06-01",
+        "service": "DoorDash",
+        "restaurant": "Whataburger",
+        "miles": 9.2,
+        "timestamps": {
+          "startTime": "11:19",
+          "restArrivalTime": "11:24",
+          "restDepartureTime": "11:26",
+          "deliveryTime": "11:34",
+          "endDeadheadTime": "11:43"
+        },
+        "segments": {
+          "toRestaurant": 305,
+          "atRestaurant": 148,
+          "toCustomer": 525,
+          "returnToHotspot": 582
+        },
+        "totalDuration": 1560,
+        "pay": {
+          "gross": 19.89,
+          "net": 13.73,
+          "grossHourly": 45.9,
+          "netHourly": 31.68
+        }
+      },
+      {
+        "id": "order-7",
+        "date": "2026-06-01",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 13.1,
+        "timestamps": {
+          "startTime": "11:49",
+          "restArrivalTime": "11:57",
+          "restDepartureTime": "12:01",
+          "deliveryTime": "12:10",
+          "endDeadheadTime": "12:27"
+        },
+        "segments": {
+          "toRestaurant": 496,
+          "atRestaurant": 289,
+          "toCustomer": 549,
+          "returnToHotspot": 1066
+        },
+        "totalDuration": 2400,
+        "pay": {
+          "gross": 21.62,
+          "net": 12.84,
+          "grossHourly": 32.43,
+          "netHourly": 19.26
+        }
+      },
+      {
+        "id": "order-8",
+        "date": "2026-06-01",
+        "service": "DoorDash",
+        "restaurant": "Panda Express",
+        "miles": 3.9,
+        "timestamps": {
+          "startTime": "12:29",
+          "restArrivalTime": "12:31",
+          "restDepartureTime": "12:35",
+          "deliveryTime": "12:40",
+          "endDeadheadTime": "12:45"
+        },
+        "segments": {
+          "toRestaurant": 156,
+          "atRestaurant": 260,
+          "toCustomer": 348,
+          "returnToHotspot": 316
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 11.54,
+          "net": 8.93,
+          "grossHourly": 38.47,
+          "netHourly": 29.77
+        }
+      }
+    ],
+    "activeTime": "03:52:00",
+    "idleTime": "00:45:00",
+    "totalPay": {
+      "gross": 142.76,
+      "net": 95.26000000000002,
+      "activeHourlyGross": 36.92068965517241,
+      "activeHourlyNet": 24.63620689655173,
+      "overallHourlyGross": 30.92274368231047,
+      "overallHourlyNet": 20.633935018050547
+    }
+  },
+  {
+    "id": "workDay - 2026-09-19",
+    "date": "2026-09-19",
+    "shifts": [
+      {
+        "clockInTime": "08:48",
+        "clockOutTime": "11:08",
+        "duration": 8400
+      },
+      {
+        "clockInTime": "11:25",
+        "clockOutTime": "14:25",
+        "duration": 10800
+      }
+    ],
+    "totalTime": "05:20:00",
+    "orders": [
+      {
+        "id": "order-1",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Panda Express",
+        "miles": 8.9,
+        "timestamps": {
+          "startTime": "08:58",
+          "restArrivalTime": "09:00",
+          "restDepartureTime": "09:04",
+          "deliveryTime": "09:09",
+          "endDeadheadTime": "09:30"
+        },
+        "segments": {
+          "toRestaurant": 148,
+          "atRestaurant": 242,
+          "toCustomer": 342,
+          "returnToHotspot": 1308
+        },
+        "totalDuration": 2040,
+        "pay": {
+          "gross": 19.24,
+          "net": 13.28,
+          "grossHourly": 33.95,
+          "netHourly": 23.44
+        }
+      },
+      {
+        "id": "order-2",
+        "date": "2026-09-19",
+        "service": "DoorDash",
+        "restaurant": "Chick-fil-A",
+        "miles": 9.5,
+        "timestamps": {
+          "startTime": "09:34",
+          "restArrivalTime": "09:40",
+          "restDepartureTime": "09:45",
+          "deliveryTime": "09:50",
+          "endDeadheadTime": "10:04"
+        },
+        "segments": {
+          "toRestaurant": 366,
+          "atRestaurant": 327,
+          "toCustomer": 310,
+          "returnToHotspot": 857
+        },
+        "totalDuration": 1860,
+        "pay": {
+          "gross": 19.05,
+          "net": 12.69,
+          "grossHourly": 36.87,
+          "netHourly": 24.56
+        }
+      },
+      {
+        "id": "order-3",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Killer Burger",
+        "miles": 6.7,
+        "timestamps": {
+          "startTime": "10:06",
+          "restArrivalTime": "10:08",
+          "restDepartureTime": "10:11",
+          "deliveryTime": "10:17",
+          "endDeadheadTime": "10:30"
+        },
+        "segments": {
+          "toRestaurant": 125,
+          "atRestaurant": 212,
+          "toCustomer": 404,
+          "returnToHotspot": 819
+        },
+        "totalDuration": 1560,
+        "pay": {
+          "gross": 18.26,
+          "net": 13.77,
+          "grossHourly": 42.14,
+          "netHourly": 31.78
+        }
+      },
+      {
+        "id": "order-4",
+        "date": "2026-09-19",
+        "service": "DoorDash",
+        "restaurant": "Panda Express",
+        "miles": 7,
+        "timestamps": {
+          "startTime": "10:32",
+          "restArrivalTime": "10:34",
+          "restDepartureTime": "10:36",
+          "deliveryTime": "10:41",
+          "endDeadheadTime": "10:49"
+        },
+        "segments": {
+          "toRestaurant": 158,
+          "atRestaurant": 127,
+          "toCustomer": 314,
+          "returnToHotspot": 481
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 14.96,
+          "net": 10.27,
+          "grossHourly": 49.87,
+          "netHourly": 34.23
+        }
+      },
+      {
+        "id": "order-5",
+        "date": "2026-09-19",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 6.3,
+        "timestamps": {
+          "startTime": "10:50",
+          "restArrivalTime": "10:53",
+          "restDepartureTime": "10:55",
+          "deliveryTime": "11:01",
+          "endDeadheadTime": "11:07"
+        },
+        "segments": {
+          "toRestaurant": 194,
+          "atRestaurant": 131,
+          "toCustomer": 387,
+          "returnToHotspot": 368
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 10.26,
+          "net": 6.04,
+          "grossHourly": 34.2,
+          "netHourly": 20.13
+        }
+      },
+      {
+        "id": "order-6",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 8.8,
+        "timestamps": {
+          "startTime": "11:27",
+          "restArrivalTime": "11:31",
+          "restDepartureTime": "11:33",
+          "deliveryTime": "11:37",
+          "endDeadheadTime": "11:53"
+        },
+        "segments": {
+          "toRestaurant": 251,
+          "atRestaurant": 144,
+          "toCustomer": 295,
+          "returnToHotspot": 990
+        },
+        "totalDuration": 1680,
+        "pay": {
+          "gross": 16.72,
+          "net": 10.82,
+          "grossHourly": 35.83,
+          "netHourly": 23.19
+        }
+      },
+      {
+        "id": "order-7",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Whataburger",
+        "miles": 10.1,
+        "timestamps": {
+          "startTime": "11:56",
+          "restArrivalTime": "12:01",
+          "restDepartureTime": "12:08",
+          "deliveryTime": "12:14",
+          "endDeadheadTime": "12:28"
+        },
+        "segments": {
+          "toRestaurant": 326,
+          "atRestaurant": 450,
+          "toCustomer": 371,
+          "returnToHotspot": 893
+        },
+        "totalDuration": 2040,
+        "pay": {
+          "gross": 24.31,
+          "net": 17.54,
+          "grossHourly": 42.9,
+          "netHourly": 30.95
+        }
+      },
+      {
+        "id": "order-8",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Panda Express",
+        "miles": 5.1,
+        "timestamps": {
+          "startTime": "12:43",
+          "restArrivalTime": "12:46",
+          "restDepartureTime": "12:50",
+          "deliveryTime": "12:57",
+          "endDeadheadTime": "13:03"
+        },
+        "segments": {
+          "toRestaurant": 197,
+          "atRestaurant": 285,
+          "toCustomer": 448,
+          "returnToHotspot": 390
+        },
+        "totalDuration": 1320,
+        "pay": {
+          "gross": 15.86,
+          "net": 12.44,
+          "grossHourly": 43.25,
+          "netHourly": 33.93
+        }
+      },
+      {
+        "id": "order-9",
+        "date": "2026-09-19",
+        "service": "GrubHub",
+        "restaurant": "Chick-fil-A",
+        "miles": 6.8,
+        "timestamps": {
+          "startTime": "13:14",
+          "restArrivalTime": "13:19",
+          "restDepartureTime": "13:23",
+          "deliveryTime": "13:32",
+          "endDeadheadTime": "13:40"
+        },
+        "segments": {
+          "toRestaurant": 331,
+          "atRestaurant": 270,
+          "toCustomer": 569,
+          "returnToHotspot": 510
+        },
+        "totalDuration": 1680,
+        "pay": {
+          "gross": 13.96,
+          "net": 9.4,
+          "grossHourly": 29.91,
+          "netHourly": 20.14
+        }
+      },
+      {
+        "id": "order-10",
+        "date": "2026-09-19",
+        "service": "DoorDash",
+        "restaurant": "McDonalds",
+        "miles": 4.8,
+        "timestamps": {
+          "startTime": "13:45",
+          "restArrivalTime": "13:49",
+          "restDepartureTime": "13:53",
+          "deliveryTime": "13:59",
+          "endDeadheadTime": "14:02"
+        },
+        "segments": {
+          "toRestaurant": 240,
+          "atRestaurant": 243,
+          "toCustomer": 371,
+          "returnToHotspot": 226
+        },
+        "totalDuration": 1080,
+        "pay": {
+          "gross": 18.05,
+          "net": 14.83,
+          "grossHourly": 60.17,
+          "netHourly": 49.43
+        }
+      },
+      {
+        "id": "order-11",
+        "date": "2026-09-19",
+        "service": "UberEats",
+        "restaurant": "Killer Burger",
+        "miles": 7.9,
+        "timestamps": {
+          "startTime": "14:04",
+          "restArrivalTime": "14:08",
+          "restDepartureTime": "14:11",
+          "deliveryTime": "14:17",
+          "endDeadheadTime": "14:22"
+        },
+        "segments": {
+          "toRestaurant": 255,
+          "atRestaurant": 233,
+          "toCustomer": 416,
+          "returnToHotspot": 356
+        },
+        "totalDuration": 1260,
+        "pay": {
+          "gross": 20.69,
+          "net": 15.4,
+          "grossHourly": 59.11,
+          "netHourly": 44
+        }
+      }
+    ],
+    "activeTime": "04:38:00",
+    "idleTime": "00:42:00",
+    "totalPay": {
+      "gross": 191.36,
+      "net": 136.48,
+      "activeHourlyGross": 41.30071942446043,
+      "activeHourlyNet": 29.456115107913664,
+      "overallHourlyGross": 35.88,
+      "overallHourlyNet": 25.59
+    }
+  }
+]

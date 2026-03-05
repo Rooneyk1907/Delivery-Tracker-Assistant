@@ -115,7 +115,6 @@ export default function LiveTracker() {
   useEffect(() => {
     (async () => {
       const activeShift = await checkClockedIn();
-      // console.log('activeShift from useEffect', activeShift)
       if (activeShift) {
         setActiveShiftId(activeShift.id);
         setShifts(activeShift.shifts);
@@ -124,9 +123,6 @@ export default function LiveTracker() {
         setTotalPay(activeShift.totalPay);
         
       }
-
-      // console.log('activeShiftId in useEffect', activeShiftId)
-
 
       const activeOrder = await loadTracking();
       if (activeOrder) {
@@ -199,7 +195,7 @@ export default function LiveTracker() {
         gross: grossPay || 0,
         net: grossPay - miles * 0.67,
         grossHourly: 0,
-        grossNet: 0,
+        netHourly: 0,
       },
       phase: 'toRestaurant',
       startMs: ms,
@@ -431,7 +427,7 @@ export default function LiveTracker() {
       const newShift: Shift = {
         clockInTime: inTime,
         clockOutTime: '',
-        duration: '',
+        duration: 0,
       } 
       await update(existingWorkDay.id, { 
         shifts: [...existingWorkDay.shifts, newShift],
@@ -446,7 +442,7 @@ export default function LiveTracker() {
       shifts: [{
           clockInTime: inTime,
           clockOutTime: '',
-          duration: '',
+          duration: 0,
         }],
       totalTime: '',
       orders: [],
@@ -489,7 +485,7 @@ export default function LiveTracker() {
         ? {
           ...shift,
           clockOutTime: outTime,
-          duration: calculateShiftDuration(shift.clockInTime, outTime)
+          duration: Number(calculateShiftDuration(shift.clockInTime, outTime))
         } : shift
     });
     

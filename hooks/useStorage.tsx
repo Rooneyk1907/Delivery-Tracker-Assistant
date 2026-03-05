@@ -9,6 +9,8 @@ import { generateId, parseDurationToSeconds, secondsToHHMMSS } from '@/helpers/h
 const LONG_TERM_STORAGE_KEY = '@long_term_storage'
 const TEMP_STORAGE_LIVE_TRACKING_KEY = '@temp_storage_live_tracking'
 const TEMP_STORAGE_ORDER_ENTRY_DRAFT_KEY = '@temp_storage_order_entry_draft'
+const DEV_SAMPLE_SEED_VERSION_KEY = '@dev_sample_seed_version'
+const DEV_SAMPLE_SEED_VERSION = '2026-02-20-1'
 
 // TYPES //
 export interface StoredDay extends WorkDay {
@@ -36,6 +38,33 @@ export interface OrderEntryDraft {
 }
 
 //  STORAGE FUNCTIONS //
+
+export async function seedWorkDaysFromSample(options?: { force?: boolean }): Promise<void> {
+    if (!__DEV__) return;
+
+    const force = options?.force ?? false
+
+    try {
+        const seededVersion = await AsyncStorage.getItem(DEV_SAMPLE_SEED_VERSION_KEY)
+        const existingRaw = await AsyncStorage.getItem(LONG_TERM_STORAGE_KEY)
+        const existingDays = existingRaw ? (JSON.parse(existingRaw) as StoredDay[]) : []
+
+        if (!force && seededVersion === DEV_SAMPLE_SEED_VERSION) return
+        if (!force && existingDays.length > 0) {
+            await AsyncStorage.setItem(DEV_SAMPLE_SEED_VERSION_KEY, DEV_SAMPLE_SEED_VERSION)
+            return
+        }
+
+        const sampleDays = require('../assets/sample-data.json') as WorkDay[]
+        const now = new Date().toISOString()
+        const seeded: StoredDay[] = sampleDays.map((day) => ({ ...day, savedAt: now }))
+
+        await AsyncStorage.setItem(LONG_TERM_STORAGE_KEY, JSON.stringify(seeded))
+        await AsyncStorage.setItem(DEV_SAMPLE_SEED_VERSION_KEY, DEV_SAMPLE_SEED_VERSION)
+    } catch (error) {
+        console.error('useStorage: seedWorkDaysFromSample failed', error)
+    }
+}
 
 // WORK DAYS ///
 export function workDay() {
