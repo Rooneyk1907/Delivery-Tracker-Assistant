@@ -20,11 +20,41 @@ export default function DetailedHistoryCard({
 			transparent
 			animationType='fade'
 			onRequestClose={onClose}>
-			<Pressable>
-				<Pressable>
-					<Text>{order.restaurant}</Text>
+			<Pressable
+				style={styles.backdrop}
+				onPress={onClose}>
+				<Pressable
+					style={styles.card}
+					onPress={() => {}}>
+					<Text style={styles.restaurant}>{order.restaurant}</Text>
+					<Text>{order.service}</Text>
+					<Text>{order.date}</Text>
+					<Text>Gross: ${order.pay.gross.toFixed(2)}</Text>
+					<Text>Net: ${order.pay.net.toFixed(2)}</Text>
 				</Pressable>
 			</Pressable>
 		</Modal>
 	);
 }
+
+const styles = StyleSheet.create({
+	backdrop: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.45)',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 16,
+	},
+	card: {
+		width: '100%',
+		maxWidth: 420,
+		backgroundColor: '#fff',
+		borderRadius: 12,
+		padding: 16,
+	},
+	restaurant: {
+		fontSize: 18,
+		fontWeight: '700',
+		marginBottom: 8,
+	},
+});
