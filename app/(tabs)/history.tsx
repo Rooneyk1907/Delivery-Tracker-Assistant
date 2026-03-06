@@ -41,7 +41,7 @@ const OrderCard = ({ order, onPress }: OrderCardProps) => {
 		<TouchableOpacity
 			style={styles.orderCard}
 			activeOpacity={0.85}
-			onPress={() => console.log('pressed')}>
+			onPress={() => console.log('pressed orderId:', order.id)}>
 			{/* Row 1: restaurant top left / service top right */}
 			<View style={styles.headerRow}>
 				<Text
