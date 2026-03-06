@@ -170,7 +170,7 @@ function createOrderWithinShift(
 	const netHourly = round2(netPay / totalHours);
 
 	return {
-		id: `order-${orderId}`,
+		id: generateId(),
 		date,
 		service,
 		restaurant,
@@ -270,7 +270,7 @@ function createSampleDays(numberOfDays) {
 		const totals = calculateDayTotals(shifts, orders);
 
 		const generatedDay = {
-			id: `workDay - ${date}`,
+			id: `workDay - ${date}-${generateId()}`,
 			date,
 			shifts,
 			totalTime: totals.totalTime,

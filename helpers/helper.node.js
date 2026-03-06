@@ -100,7 +100,12 @@ function parseTimeToMinutes(value) {
 	throw new Error(`Invalid time: ${value}`);
 }
 
+function generateId() {
+	return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
 module.exports = {
+	generateId,
 	parseDurationToSeconds,
 	calculateDayTotals,
 	parseTimeToMinutes,

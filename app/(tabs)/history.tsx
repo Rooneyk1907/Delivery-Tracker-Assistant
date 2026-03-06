@@ -15,8 +15,8 @@ import { workDay } from '@/hooks/useStorage';
 import colors from '@/constants/Colors';
 
 import { DashboardMetrics } from '@/types/dashboardmetrics';
-import { WorkDay, TotalPay, Shift } from '@/types/workday';
-import Order, { Segments, Timestamps, Pay } from '@/types/order';
+import { WorkDay } from '@/types/workday';
+import Order from '@/types/order';
 import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
 import {
 	calculateDashboardMetrics,
