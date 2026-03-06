@@ -7,8 +7,6 @@ import colors from '@/constants/Colors';
 
 import Dashboard from '@/components/dashboard';
 
-const COST_PER_MILE = 0.67;
-
 export default function Index() {
 	return (
 		<SafeAreaView style={styles.safe}>

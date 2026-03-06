@@ -3,7 +3,7 @@ import ActiveOrder from '@/types/order';
 import Order from '@/types/order';
 import { DashboardMetrics } from '@/types/dashboardmetrics';
 
-import { MILEAGE_DEDUCTION } from '@/constants/Values';
+import MILEAGE_DEDUCTION from '@/constants/Values';
 
 export function generateId() {
 	return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
