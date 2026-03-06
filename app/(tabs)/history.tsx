@@ -17,11 +17,14 @@ import colors from '@/constants/Colors';
 import { DashboardMetrics } from '@/types/dashboardmetrics';
 import { WorkDay } from '@/types/workday';
 import Order from '@/types/order';
+
 import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
 import {
 	calculateDashboardMetrics,
 	parseDurationToSeconds,
 } from '@/helpers/helper';
+
+import DetailedHistoryCard from '@/components/detailedHistoryCard';
 
 type OrderCardProps = {
 	order: Order;
@@ -41,7 +44,7 @@ const OrderCard = ({ order, onPress }: OrderCardProps) => {
 		<TouchableOpacity
 			style={styles.orderCard}
 			activeOpacity={0.85}
-			onPress={() => console.log('pressed orderId:', order.id)}>
+			onPress={onPress}>
 			{/* Row 1: restaurant top left / service top right */}
 			<View style={styles.headerRow}>
 				<Text
@@ -224,6 +227,8 @@ export default function History() {
 	const [selectedFilterId, setSelectedFilterId] = useState<
 		FilterOption['id'] | null
 	>(null);
+
+	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
 	const selectedFilterLabel =
 		filterOptions.find((f) => f.id === selectedFilterId)?.value ??
@@ -449,9 +454,7 @@ export default function History() {
 											renderItem={({ item }) => (
 												<OrderCard
 													order={item}
-													onPress={() =>
-														console.log(`order pressed: ${item.id}`)
-													}
+													onPress={() => setSelectedOrder(item)}
 												/>
 											)}
 											ListEmptyComponent={
@@ -464,6 +467,11 @@ export default function History() {
 						</View>
 					)}
 				</View>
+				<DetailedHistoryCard
+					visible={selectedOrder !== null}
+					order={selectedOrder}
+					onClose={() => setSelectedOrder(null)}
+				/>
 			</ScrollView>
 		</SafeAreaView>
 	);
