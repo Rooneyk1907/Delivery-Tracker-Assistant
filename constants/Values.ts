@@ -1,0 +1,3 @@
+const MILEAGE_DEDUCTION = 0.67;
+
+export default MILEAGE_DEDUCTION;

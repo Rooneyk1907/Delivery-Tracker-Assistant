@@ -14,125 +14,12 @@ import { workDay } from '@/hooks/useStorage';
 
 import colors from '@/constants/Colors';
 
-import { DashboardMetrics } from '@/types/dashboardmetrics';
-import { WorkDay, TotalPay, Shift } from '@/types/workday';
-import Order, { Segments, Timestamps, Pay } from '@/types/order';
-import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
-import {
-	calculateDashboardMetrics,
-	parseDurationToSeconds,
-} from '@/helpers/helper';
+import { WorkDay } from '@/types/workday';
+import { Order } from '@/types/order';
 
-type OrderCardProps = {
-	order: Order;
-	onPress: () => void;
-};
-
-const OrderCard = ({ order, onPress }: OrderCardProps) => {
-	const orderTimes = formatOrderTimes(order);
-
-	function colorPicker(orderTime: number) {
-		if (orderTime >= 0.75) return colors.error;
-		else if (orderTime >= 0.5) return colors.warning;
-		else return colors.success;
-	}
-
-	return (
-		<TouchableOpacity
-			style={styles.orderCard}
-			activeOpacity={0.85}
-			onPress={() => console.log('pressed')}>
-			{/* Row 1: restaurant top left / service top right */}
-			<View style={styles.headerRow}>
-				<Text
-					style={styles.restaurantText}
-					numberOfLines={1}
-					ellipsizeMode='tail'>
-					{order.restaurant}
-				</Text>
-				<Text
-					style={styles.serviceText}
-					numberOfLines={1}
-					ellipsizeMode='tail'>
-					{order.service}
-				</Text>
-			</View>
-
-			{/* Row 2: Pay */}
-			<View style={styles.sectionRow}>
-				<Text style={styles.sectionHeading}>Pay</Text>
-				<View style={styles.statsRow}>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Gross Pay</Text>
-						<Text style={[styles.subStatDisplay, styles.grossPay]}>
-							${order.pay.gross.toFixed(2)}
-						</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Hourly Gross</Text>
-						<Text style={[styles.subStatDisplay, styles.grossPay]}>
-							${order.pay.grossHourly.toFixed(2)}/hr
-						</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Net Pay</Text>
-						<Text style={[styles.subStatDisplay, styles.netPay]}>
-							${order.pay.net.toFixed(2)}
-						</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Hourly Net</Text>
-						<Text style={[styles.subStatDisplay, styles.netPay]}>
-							${order.pay.netHourly.toFixed(2)}/hr
-						</Text>
-					</View>
-				</View>
-			</View>
-
-			{/* Row 3: Times */}
-			<View style={styles.sectionRow}>
-				<Text style={styles.sectionHeading}>Times</Text>
-				<View style={styles.statsRow}>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Total Time</Text>
-						<Text style={styles.subStatDisplay}>
-							{orderTimes.totalDuration}
-						</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Travel Time</Text>
-						<Text
-							style={[
-								styles.subStatDisplay,
-								{
-									color: colorPicker(orderTimes.percentages.totalTravel),
-								},
-							]}>
-							{orderTimes.totalTravel}
-						</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Wait Time</Text>
-						<Text
-							style={[
-								styles.subStatDisplay,
-								{ color: colorPicker(orderTimes.percentages.totalWait) },
-							]}>
-							{orderTimes.totalWait}
-						</Text>
-					</View>
-				</View>
-				{/* Move to Detail card */}
-				{/* <Text>{orderTimes.toRestaurant} to Restaurant</Text> */}
-				{/* <Text>{orderTimes.toCustomer} to Customer</Text> */}
-				{/* <Text>{orderTimes.atRestaurant} Wait at Restaruarnt</Text> */}
-				{/* <Text>
-					{orderTimes.returnToHotspot} return to hotspot/time before new order
-				</Text> */}
-			</View>
-		</TouchableOpacity>
-	);
-};
+import SummaryCard from '@/components/history/summaryCard';
+import OrderCard from '@/components/history/orderCard';
+import DetailedHistoryCard from '@/components/history/detailedHistoryCard';
 
 type FilterOption = {
 	id: 'today' | 'prev7days' | 'thisMonth' | 'prevMonthRolling' | 'all';
@@ -213,17 +100,18 @@ const buildDateArrayFromFilter = (
 
 export default function History() {
 	const dayStore = workDay();
-	const { loadAll, getWorkDay } = dayStore;
+	const { loadAll } = dayStore;
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const [workDays, setWorkDays] = useState<WorkDay[]>([]);
-	const [orders, setOrders] = useState<Order[]>([]);
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 	const [selectedFilterId, setSelectedFilterId] = useState<
 		FilterOption['id'] | null
 	>(null);
+
+	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
 	const selectedFilterLabel =
 		filterOptions.find((f) => f.id === selectedFilterId)?.value ??
@@ -255,140 +143,6 @@ export default function History() {
 	);
 
 	const hasSelectedFilter = selectedFilterId !== null;
-
-	const SummaryCard = () => {
-		const calculatedMetrics = calculateDashboardMetrics(filteredWorkDays);
-
-		function idleColorPicker(
-			calculatedMetrics: DashboardMetrics,
-			type: string,
-		) {
-			const idleTime = parseDurationToSeconds(calculatedMetrics.totalIdleTime);
-			const activeTime = parseDurationToSeconds(
-				calculatedMetrics.totalActiveTime,
-			);
-			const totalTime = parseDurationToSeconds(calculatedMetrics.totalTime);
-
-			const idlePercentage = idleTime / totalTime;
-			const activePercentage = activeTime / totalTime;
-
-			switch (type) {
-				case 'idle': {
-					if (idlePercentage > 0.25) return colors.warning;
-					else if (Number.isNaN(idlePercentage)) return colors.dark;
-					else return colors.success;
-				}
-				case 'active': {
-					if (activePercentage > 0.5) return colors.success;
-					else if (Number.isNaN(activePercentage)) return colors.dark;
-					else return colors.warning;
-				}
-
-				default:
-					return colors.dark;
-			}
-		}
-
-		return (
-			<View style={{ minWidth: '100%' }}>
-				<Text style={styles.subHeading}>Summary</Text>
-				<View style={styles.statsRow}>
-					<View style={styles.subStatBox}>
-						<Text>Worked Days: </Text>
-						<Text style={styles.statDisplay}>{filteredWorkDays.length}</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text>Orders: </Text>
-						<Text style={styles.statDisplay}>{filteredOrders.length}</Text>
-					</View>
-				</View>
-				<View>
-					<Text style={styles.sectionHeading}>Pay</Text>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Gross Pay</Text>
-							<Text style={[styles.subStatDisplay, styles.grossPay]}>
-								${calculatedMetrics.totalGross.toFixed(2)}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Mileage</Text>
-							<Text style={styles.subStatDisplay}>
-								{calculatedMetrics.totalMiles.toFixed(1)} miles
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Net Pay</Text>
-							<Text style={[styles.subStatDisplay, styles.netPay]}>
-								${calculatedMetrics.totalNet.toFixed(2)}
-							</Text>
-						</View>
-					</View>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Overall Hourly Gross</Text>
-							<Text style={[styles.subStatDisplay, styles.grossPay]}>
-								$
-								{Number.isNaN(calculatedMetrics.totalOverallHourlyGross)
-									? '0.00'
-									: calculatedMetrics.totalOverallHourlyGross.toFixed(2)}
-								/hr
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Overall Hourly Net</Text>
-							<Text style={[styles.subStatDisplay, styles.netPay]}>
-								$
-								{Number.isNaN(calculatedMetrics.totalOverallHourlyNet)
-									? '0.00'
-									: calculatedMetrics.totalOverallHourlyNet.toFixed(2)}
-								/hr
-							</Text>
-						</View>
-					</View>
-				</View>
-				<View>
-					<Text style={styles.sectionHeading}>Time</Text>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Active Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{
-										color: idleColorPicker(calculatedMetrics, 'active'),
-									},
-								]}>
-								{calculatedMetrics.totalActiveTime}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Idle Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{ color: idleColorPicker(calculatedMetrics, 'idle') },
-								]}>
-								{calculatedMetrics.totalIdleTime}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Overall Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{
-										color: idleColorPicker(calculatedMetrics, 'overall'),
-									},
-								]}>
-								{calculatedMetrics.totalTime}
-							</Text>
-						</View>
-					</View>
-				</View>
-			</View>
-		);
-	};
 
 	return (
 		<SafeAreaView style={styles.safe}>
@@ -437,9 +191,15 @@ export default function History() {
 							</View>
 							{hasSelectedFilter && (
 								<>
-									<View style={styles.card}>
-										<SummaryCard />
-									</View>
+									{filteredWorkDays && (
+										<View style={styles.card}>
+											<Text style={styles.subHeading}>Summary</Text>
+											<SummaryCard
+												workDays={filteredWorkDays}
+												orders={filteredOrders}
+											/>
+										</View>
+									)}
 									<View style={styles.card}>
 										<Text style={styles.subHeading}>Orders</Text>
 										<FlatList
@@ -449,9 +209,7 @@ export default function History() {
 											renderItem={({ item }) => (
 												<OrderCard
 													order={item}
-													onPress={() =>
-														console.log(`order pressed: ${item.id}`)
-													}
+													onPress={() => setSelectedOrder(item)}
 												/>
 											)}
 											ListEmptyComponent={
@@ -464,6 +222,13 @@ export default function History() {
 						</View>
 					)}
 				</View>
+
+				{/* Detailed history shows when clicked */}
+				<DetailedHistoryCard
+					visible={selectedOrder !== null}
+					order={selectedOrder}
+					onClose={() => setSelectedOrder(null)}
+				/>
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -489,7 +254,6 @@ const styles = StyleSheet.create({
 		color: colors.labelText,
 		textTransform: 'uppercase',
 	},
-
 	heading: {
 		alignSelf: 'center',
 		color: colors.labelText,
@@ -556,48 +320,6 @@ const styles = StyleSheet.create({
 	dropdownItemText: {
 		color: colors.dark,
 	},
-	orderCard: {
-		flexDirection: 'column',
-		alignItems: 'stretch',
-		backgroundColor: '#fff',
-		borderWidth: 1,
-		borderColor: '#eee',
-		borderRadius: 10,
-		padding: 12,
-		marginBottom: 10,
-		gap: 10,
-	},
-	headerRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 12,
-	},
-	restaurantText: {
-		flex: 1,
-		minWidth: 0,
-		fontSize: 16,
-		fontWeight: '700',
-		color: colors.dark,
-		textTransform: 'uppercase',
-	},
-	serviceText: {
-		flexShrink: 0,
-		fontSize: 13,
-		fontWeight: '600',
-		color: colors.labelText,
-		textTransform: 'uppercase',
-	},
-	sectionRow: {
-		width: '100%',
-	},
-	statsRow: {
-		flexDirection: 'row',
-		flexWrap: 'nowrap',
-		justifyContent: 'space-between',
-		gap: 8,
-		marginTop: 6,
-	},
 	orderInfo: {
 		flex: 1,
 		minWidth: 0,
@@ -639,6 +361,13 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		gap: 8,
+	},
+	statsRow: {
+		flexDirection: 'row',
+		flexWrap: 'nowrap',
+		justifyContent: 'space-between',
+		gap: 8,
+		marginTop: 6,
 	},
 	subStatBox: {
 		flex: 1,
