@@ -5,6 +5,8 @@ import { useState } from 'react';
 
 import colors from '@/constants/Colors';
 
+import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
+
 type DetailedHistoryCardProps = {
 	visible: boolean;
 	order: Order | null;
@@ -19,6 +21,8 @@ export default function DetailedHistoryCard({
 	if (!order) return null;
 
 	const [inEditMode, setInEditMode] = useState<boolean>(false);
+
+	const orderTimes = formatOrderTimes(order);
 
 	function handleEditPress() {
 		setInEditMode(true);
@@ -40,6 +44,9 @@ export default function DetailedHistoryCard({
 		onClose();
 	}
 
+	// TODO: create color picker function that takes into account mileage
+	function colorPicker(order: Order) {}
+
 	return (
 		<Modal
 			visible={visible}
@@ -56,10 +63,90 @@ export default function DetailedHistoryCard({
 						<Text style={styles.restaurantText}>{order.restaurant}</Text>
 						<Text style={styles.serviceText}>{order.service}</Text>
 					</View>
-					<Text>{order.date}</Text>
-					<Text>Gross: ${order.pay.gross.toFixed(2)}</Text>
-					<Text>Net: ${order.pay.net.toFixed(2)}</Text>
-					<View style={styles.buttonRow}>
+					<View style={styles.headerRow}>
+						<Text style={styles.label}>
+							{order.date} | {order.timestamps.startTime} -{' '}
+							{order.timestamps.endDeadheadTime} | {orderTimes.totalDuration}
+						</Text>
+					</View>
+					<Text style={styles.sectionHeading}>Pay</Text>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Gross: </Text>
+							<Text style={[styles.subStatDisplay, styles.grossPay]}>
+								${order.pay.gross.toFixed(2)}
+							</Text>
+						</View>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Net: </Text>
+							<Text style={[styles.subStatDisplay, styles.netPay]}>
+								${order.pay.net.toFixed(2)}
+							</Text>
+						</View>
+					</View>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Hourly Gross</Text>
+							<Text style={[styles.subStatDisplay, styles.grossPay]}>
+								${order.pay.grossHourly.toFixed(2)} /hr
+							</Text>
+						</View>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Hourly Net</Text>
+							<Text style={[styles.subStatDisplay, styles.netPay]}>
+								${order.pay.netHourly.toFixed(2)} /hr
+							</Text>
+						</View>
+					</View>
+					<Text style={styles.sectionHeading}>Times</Text>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>to Restaurant</Text>
+							<Text style={styles.subStatDisplay}>
+								{orderTimes.toRestaurant}
+							</Text>
+						</View>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>at Restaurant</Text>
+							<Text style={styles.subStatDisplay}>
+								{orderTimes.atRestaurant}
+							</Text>
+						</View>
+					</View>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>to Customer</Text>
+							<Text style={styles.subStatDisplay}>{orderTimes.toCustomer}</Text>
+						</View>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>To Hotspot</Text>
+							<Text style={styles.subStatDisplay}>
+								{orderTimes.returnToHotspot}
+							</Text>
+						</View>
+					</View>
+					<Text style={styles.sectionHeading}></Text>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Total Travel</Text>
+							<Text style={styles.subStatDisplay}>
+								{orderTimes.totalTravel}
+							</Text>
+						</View>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Total Wait</Text>
+							<Text style={styles.subStatDisplay}>{orderTimes.totalWait}</Text>
+						</View>
+					</View>
+					<View style={styles.statsRow}>
+						<View style={styles.statsRow}>
+							<Text style={styles.label}>Total Time</Text>
+							<Text style={styles.subStatDisplay}>
+								{orderTimes.totalDuration}
+							</Text>
+						</View>
+					</View>
+					{/* <View style={styles.buttonRow}>
 						{!inEditMode && (
 							<Pressable
 								style={styles.editButton}
@@ -79,26 +166,11 @@ export default function DetailedHistoryCard({
 								<Text style={styles.saveButtonText}>Save</Text>
 							</Pressable>
 						)}
-					</View>
+					</View> */}
 				</Pressable>
 			</Pressable>
 		</Modal>
 	);
-}
-
-{
-	/* <Text>{orderTimes.toRestaurant} to Restaurant</Text> */
-}
-{
-	/* <Text>{orderTimes.toCustomer} to Customer</Text> */
-}
-{
-	/* <Text>{orderTimes.atRestaurant} Wait at Restaruarnt</Text> */
-}
-{
-	/* <Text>
-					{orderTimes.returnToHotspot} return to hotspot/time before new order
-				</Text> */
 }
 
 const styles = StyleSheet.create({
@@ -137,6 +209,15 @@ const styles = StyleSheet.create({
 		color: colors.labelText,
 		textTransform: 'uppercase',
 	},
+	sectionHeading: {
+		fontSize: 17,
+		fontWeight: '800',
+		color: colors.dark,
+		textTransform: 'uppercase',
+		marginTop: 7,
+		borderTopWidth: 2,
+		borderTopColor: colors.border,
+	},
 	grossPay: {
 		fontSize: 14,
 		color: colors.labelText,
@@ -156,9 +237,15 @@ const styles = StyleSheet.create({
 	statsRow: {
 		flexDirection: 'row',
 		flexWrap: 'nowrap',
-		justifyContent: 'space-between',
+		justifyContent: 'space-around',
 		gap: 8,
 		marginTop: 6,
+	},
+	label: {
+		fontSize: 14,
+		color: colors.labelText,
+		fontWeight: '600',
+		textTransform: 'uppercase',
 	},
 	subStatBox: {
 		flex: 1,
@@ -174,10 +261,9 @@ const styles = StyleSheet.create({
 		margin: 0,
 	},
 	subStatDisplay: {
-		fontSize: 12,
+		fontSize: 14,
 		fontWeight: 'bold',
 		color: colors.dark,
-		marginTop: 2,
 	},
 	buttonRow: {
 		flexDirection: 'row',
