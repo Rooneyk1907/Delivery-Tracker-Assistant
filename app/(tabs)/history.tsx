@@ -221,7 +221,6 @@ export default function History() {
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
 	const [workDays, setWorkDays] = useState<WorkDay[]>([]);
-	const [orders, setOrders] = useState<Order[]>([]);
 
 	const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 	const [selectedFilterId, setSelectedFilterId] = useState<
@@ -497,7 +496,6 @@ const styles = StyleSheet.create({
 		color: colors.labelText,
 		textTransform: 'uppercase',
 	},
-
 	heading: {
 		alignSelf: 'center',
 		color: colors.labelText,
