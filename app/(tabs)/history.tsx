@@ -14,14 +14,8 @@ import { workDay } from '@/hooks/useStorage';
 
 import colors from '@/constants/Colors';
 
-import { DashboardMetrics } from '@/types/dashboardmetrics';
 import { WorkDay } from '@/types/workday';
 import { Order } from '@/types/order';
-
-import {
-	calculateDashboardMetrics,
-	parseDurationToSeconds,
-} from '@/helpers/helper';
 
 import SummaryCard from '@/components/history/summaryCard';
 import OrderCard from '@/components/history/orderCard';
@@ -106,7 +100,7 @@ const buildDateArrayFromFilter = (
 
 export default function History() {
 	const dayStore = workDay();
-	const { loadAll, getWorkDay } = dayStore;
+	const { loadAll } = dayStore;
 
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -228,6 +222,8 @@ export default function History() {
 						</View>
 					)}
 				</View>
+
+				{/* Detailed history shows when clicked */}
 				<DetailedHistoryCard
 					visible={selectedOrder !== null}
 					order={selectedOrder}

@@ -159,12 +159,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		margin: 0,
 	},
-	statDisplay: {
-		fontSize: 14,
-		fontWeight: 'bold',
-		color: colors.dark,
-		marginTop: 4,
-	},
 	subStatDisplay: {
 		fontSize: 12,
 		fontWeight: 'bold',
