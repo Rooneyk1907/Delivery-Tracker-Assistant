@@ -16,14 +16,14 @@ import colors from '@/constants/Colors';
 
 import { DashboardMetrics } from '@/types/dashboardmetrics';
 import { WorkDay } from '@/types/workday';
-import Order from '@/types/order';
+import { Order } from '@/types/order';
 
-import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
 import {
 	calculateDashboardMetrics,
 	parseDurationToSeconds,
 } from '@/helpers/helper';
 
+import SummaryCard from '@/components/history/summaryCard';
 import OrderCard from '@/components/history/orderCard';
 import DetailedHistoryCard from '@/components/history/detailedHistoryCard';
 
@@ -150,140 +150,6 @@ export default function History() {
 
 	const hasSelectedFilter = selectedFilterId !== null;
 
-	const SummaryCard = () => {
-		const calculatedMetrics = calculateDashboardMetrics(filteredWorkDays);
-
-		function idleColorPicker(
-			calculatedMetrics: DashboardMetrics,
-			type: string,
-		) {
-			const idleTime = parseDurationToSeconds(calculatedMetrics.totalIdleTime);
-			const activeTime = parseDurationToSeconds(
-				calculatedMetrics.totalActiveTime,
-			);
-			const totalTime = parseDurationToSeconds(calculatedMetrics.totalTime);
-
-			const idlePercentage = idleTime / totalTime;
-			const activePercentage = activeTime / totalTime;
-
-			switch (type) {
-				case 'idle': {
-					if (idlePercentage > 0.25) return colors.warning;
-					else if (Number.isNaN(idlePercentage)) return colors.dark;
-					else return colors.success;
-				}
-				case 'active': {
-					if (activePercentage > 0.5) return colors.success;
-					else if (Number.isNaN(activePercentage)) return colors.dark;
-					else return colors.warning;
-				}
-
-				default:
-					return colors.dark;
-			}
-		}
-
-		return (
-			<View style={{ minWidth: '100%' }}>
-				<Text style={styles.subHeading}>Summary</Text>
-				<View style={styles.statsRow}>
-					<View style={styles.subStatBox}>
-						<Text>Worked Days: </Text>
-						<Text style={styles.statDisplay}>{filteredWorkDays.length}</Text>
-					</View>
-					<View style={styles.subStatBox}>
-						<Text>Orders: </Text>
-						<Text style={styles.statDisplay}>{filteredOrders.length}</Text>
-					</View>
-				</View>
-				<View>
-					<Text style={styles.sectionHeading}>Pay</Text>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Gross Pay</Text>
-							<Text style={[styles.subStatDisplay, styles.grossPay]}>
-								${calculatedMetrics.totalGross.toFixed(2)}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Mileage</Text>
-							<Text style={styles.subStatDisplay}>
-								{calculatedMetrics.totalMiles.toFixed(1)} miles
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Net Pay</Text>
-							<Text style={[styles.subStatDisplay, styles.netPay]}>
-								${calculatedMetrics.totalNet.toFixed(2)}
-							</Text>
-						</View>
-					</View>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Overall Hourly Gross</Text>
-							<Text style={[styles.subStatDisplay, styles.grossPay]}>
-								$
-								{Number.isNaN(calculatedMetrics.totalOverallHourlyGross)
-									? '0.00'
-									: calculatedMetrics.totalOverallHourlyGross.toFixed(2)}
-								/hr
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Overall Hourly Net</Text>
-							<Text style={[styles.subStatDisplay, styles.netPay]}>
-								$
-								{Number.isNaN(calculatedMetrics.totalOverallHourlyNet)
-									? '0.00'
-									: calculatedMetrics.totalOverallHourlyNet.toFixed(2)}
-								/hr
-							</Text>
-						</View>
-					</View>
-				</View>
-				<View>
-					<Text style={styles.sectionHeading}>Time</Text>
-					<View style={styles.statsRow}>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Active Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{
-										color: idleColorPicker(calculatedMetrics, 'active'),
-									},
-								]}>
-								{calculatedMetrics.totalActiveTime}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Idle Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{ color: idleColorPicker(calculatedMetrics, 'idle') },
-								]}>
-								{calculatedMetrics.totalIdleTime}
-							</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Overall Time</Text>
-							<Text
-								style={[
-									styles.subStatDisplay,
-									{
-										color: idleColorPicker(calculatedMetrics, 'overall'),
-									},
-								]}>
-								{calculatedMetrics.totalTime}
-							</Text>
-						</View>
-					</View>
-				</View>
-			</View>
-		);
-	};
-
 	return (
 		<SafeAreaView style={styles.safe}>
 			<ScrollView>
@@ -331,9 +197,15 @@ export default function History() {
 							</View>
 							{hasSelectedFilter && (
 								<>
-									<View style={styles.card}>
-										<SummaryCard />
-									</View>
+									{filteredWorkDays && (
+										<View style={styles.card}>
+											<Text style={styles.subHeading}>Summary</Text>
+											<SummaryCard
+												workDays={filteredWorkDays}
+												orders={filteredOrders}
+											/>
+										</View>
+									)}
 									<View style={styles.card}>
 										<Text style={styles.subHeading}>Orders</Text>
 										<FlatList

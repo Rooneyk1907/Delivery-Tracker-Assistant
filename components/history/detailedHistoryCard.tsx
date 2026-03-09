@@ -1,4 +1,4 @@
-import Order from '@/types/order';
+import { Order } from '@/types/order';
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 type DetailedHistoryCardProps = {

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 import colors from '@/constants/Colors';
 
-import Order from '@/types/order';
+import { Order } from '@/types/order';
 
 import { formatOrderTimes } from '@/helpers/orderTimeFormatter';
 
@@ -46,13 +46,13 @@ export default function OrderCard({ order, onPress }: OrderCardProps) {
 				<Text style={styles.sectionHeading}>Pay</Text>
 				<View style={styles.statsRow}>
 					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Gross Pay</Text>
+						<Text style={styles.label}>Gross</Text>
 						<Text style={[styles.subStatDisplay, styles.grossPay]}>
 							${order.pay.gross.toFixed(2)}
 						</Text>
 					</View>
 					<View style={styles.subStatBox}>
-						<Text style={styles.label}>Net Pay</Text>
+						<Text style={styles.label}>Hourly Gross</Text>
 						<Text style={[styles.subStatDisplay, styles.grossPay]}>
 							${order.pay.grossHourly.toFixed(2)}/hr
 						</Text>
