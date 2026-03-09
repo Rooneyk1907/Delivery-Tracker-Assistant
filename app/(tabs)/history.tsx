@@ -27,117 +27,6 @@ import {
 import OrderCard from '@/components/history/orderCard';
 import DetailedHistoryCard from '@/components/history/detailedHistoryCard';
 
-type OrderCardProps = {
-	order: Order;
-	onPress: () => void;
-};
-
-// const OrderCard = ({ order, onPress }: OrderCardProps) => {
-// 	const orderTimes = formatOrderTimes(order);
-
-// 	function colorPicker(orderTime: number) {
-// 		if (orderTime >= 0.75) return colors.error;
-// 		else if (orderTime >= 0.5) return colors.warning;
-// 		else return colors.success;
-// 	}
-
-// 	return (
-// 		<TouchableOpacity
-// 			style={styles.orderCard}
-// 			activeOpacity={0.85}
-// 			onPress={onPress}>
-// 			{/* Row 1: restaurant top left / service top right */}
-// 			<View style={styles.headerRow}>
-// 				<Text
-// 					style={styles.restaurantText}
-// 					numberOfLines={1}
-// 					ellipsizeMode='tail'>
-// 					{order.restaurant}
-// 				</Text>
-// 				<Text
-// 					style={styles.serviceText}
-// 					numberOfLines={1}
-// 					ellipsizeMode='tail'>
-// 					{order.service}
-// 				</Text>
-// 			</View>
-
-// 			{/* Row 2: Pay */}
-// 			<View style={styles.sectionRow}>
-// 				<Text style={styles.sectionHeading}>Pay</Text>
-// 				<View style={styles.statsRow}>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Gross Pay</Text>
-// 						<Text style={[styles.subStatDisplay, styles.grossPay]}>
-// 							${order.pay.gross.toFixed(2)}
-// 						</Text>
-// 					</View>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Hourly Gross</Text>
-// 						<Text style={[styles.subStatDisplay, styles.grossPay]}>
-// 							${order.pay.grossHourly.toFixed(2)}/hr
-// 						</Text>
-// 					</View>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Net Pay</Text>
-// 						<Text style={[styles.subStatDisplay, styles.netPay]}>
-// 							${order.pay.net.toFixed(2)}
-// 						</Text>
-// 					</View>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Hourly Net</Text>
-// 						<Text style={[styles.subStatDisplay, styles.netPay]}>
-// 							${order.pay.netHourly.toFixed(2)}/hr
-// 						</Text>
-// 					</View>
-// 				</View>
-// 			</View>
-
-// 			{/* Row 3: Times */}
-// 			<View style={styles.sectionRow}>
-// 				<Text style={styles.sectionHeading}>Times</Text>
-// 				<View style={styles.statsRow}>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Total Time</Text>
-// 						<Text style={styles.subStatDisplay}>
-// 							{orderTimes.totalDuration}
-// 						</Text>
-// 					</View>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Travel Time</Text>
-// 						<Text
-// 							style={[
-// 								styles.subStatDisplay,
-// 								{
-// 									color: colorPicker(orderTimes.percentages.totalTravel),
-// 								},
-// 							]}>
-// 							{orderTimes.totalTravel}
-// 						</Text>
-// 					</View>
-// 					<View style={styles.subStatBox}>
-// 						<Text style={styles.label}>Wait Time</Text>
-// 						<Text
-// 							style={[
-// 								styles.subStatDisplay,
-// 								{ color: colorPicker(orderTimes.percentages.totalWait) },
-// 							]}>
-// 							{orderTimes.totalWait}
-// 						</Text>
-// 					</View>
-// 				</View>
-// 				{/* Move to Detail card */}
-// 				{/* <Text>{orderTimes.toRestaurant} to Restaurant</Text> */}
-// 				{/* <Text>{orderTimes.toCustomer} to Customer</Text> */}
-// 				{/* <Text>{orderTimes.atRestaurant} Wait at Restaruarnt</Text> */}
-// 				{/* <Text>
-// 					{orderTimes.returnToHotspot} return to hotspot/time before new order
-// 				</Text> */}
-// 			</View>
-// 		</TouchableOpacity>
-// 	);
-// };
-
 type FilterOption = {
 	id: 'today' | 'prev7days' | 'thisMonth' | 'prevMonthRolling' | 'all';
 	value: string;
@@ -563,48 +452,6 @@ const styles = StyleSheet.create({
 	dropdownItemText: {
 		color: colors.dark,
 	},
-	orderCard: {
-		flexDirection: 'column',
-		alignItems: 'stretch',
-		backgroundColor: '#fff',
-		borderWidth: 1,
-		borderColor: '#eee',
-		borderRadius: 10,
-		padding: 12,
-		marginBottom: 10,
-		gap: 10,
-	},
-	headerRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		gap: 12,
-	},
-	restaurantText: {
-		flex: 1,
-		minWidth: 0,
-		fontSize: 16,
-		fontWeight: '700',
-		color: colors.dark,
-		textTransform: 'uppercase',
-	},
-	serviceText: {
-		flexShrink: 0,
-		fontSize: 13,
-		fontWeight: '600',
-		color: colors.labelText,
-		textTransform: 'uppercase',
-	},
-	sectionRow: {
-		width: '100%',
-	},
-	statsRow: {
-		flexDirection: 'row',
-		flexWrap: 'nowrap',
-		justifyContent: 'space-between',
-		gap: 8,
-		marginTop: 6,
-	},
 	orderInfo: {
 		flex: 1,
 		minWidth: 0,
@@ -646,6 +493,13 @@ const styles = StyleSheet.create({
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		gap: 8,
+	},
+	statsRow: {
+		flexDirection: 'row',
+		flexWrap: 'nowrap',
+		justifyContent: 'space-between',
+		gap: 8,
+		marginTop: 6,
 	},
 	subStatBox: {
 		flex: 1,

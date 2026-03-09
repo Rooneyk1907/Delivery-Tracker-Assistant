@@ -8,6 +8,9 @@ const Colors = {
 	idle: '#ef6c00',
 	idleBackground: '#fff3e0',
 	background: '#f4f7f8',
+	background1: '#fff',
+	background2: '#f8f9fa',
+	border: '#eee',
 	labelText: '#7f8c8d',
 	navButton: '#vdc3c7',
 };

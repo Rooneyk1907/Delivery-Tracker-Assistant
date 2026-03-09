@@ -37,6 +37,21 @@ export default function DetailedHistoryCard({
 	);
 }
 
+{
+	/* <Text>{orderTimes.toRestaurant} to Restaurant</Text> */
+}
+{
+	/* <Text>{orderTimes.toCustomer} to Customer</Text> */
+}
+{
+	/* <Text>{orderTimes.atRestaurant} Wait at Restaruarnt</Text> */
+}
+{
+	/* <Text>
+					{orderTimes.returnToHotspot} return to hotspot/time before new order
+				</Text> */
+}
+
 const styles = StyleSheet.create({
 	backdrop: {
 		flex: 1,
