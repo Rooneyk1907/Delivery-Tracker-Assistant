@@ -168,6 +168,7 @@ export default function LiveTracker() {
 		};
 	}, []);
 
+	// TODO: move functions to separate helper file
 	function startInterval() {
 		if (intervalRef.current !== null) clearInterval(intervalRef.current);
 		intervalRef.current = setInterval(() => {
@@ -342,8 +343,8 @@ export default function LiveTracker() {
 
 			const pay = {
 				...existing.pay,
-				grossHourly: existing.pay.gross / totalHours,
-				grossNet: existing.pay.net / totalHours,
+				grossHourly: totalHours > 0 ? existing.pay.gross / totalHours : 0,
+				netHourly: totalHours > 0 ? existing.pay.net / totalHours : 0,
 			};
 			console.log('pay', pay);
 
@@ -538,7 +539,7 @@ export default function LiveTracker() {
 				? {
 						...shift,
 						clockOutTime: outTime,
-						duration: Number(
+						duration: parseDurationToSeconds(
 							calculateShiftDuration(shift.clockInTime, outTime),
 						),
 					}

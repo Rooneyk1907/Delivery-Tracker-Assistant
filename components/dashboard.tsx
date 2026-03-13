@@ -83,7 +83,7 @@ export default function Dashboard() {
 			setMetrics(calculateDashboardMetrics(dayForMetrics));
 			setIsLoading(false);
 		} catch (error) {
-			console.error('Dashboard refress failed', error);
+			console.error('Dashboard refresh failed', error);
 			setIsLoading(false);
 		} finally {
 			inFlightRef.current = false;
@@ -99,7 +99,7 @@ export default function Dashboard() {
 				if (!active) return;
 				await refreshDashboard();
 				if (!active) return;
-				timeoutId = setTimeout(loop, 2500);
+				timeoutId = setTimeout(loop, 1000);
 			};
 
 			void loop();
@@ -173,6 +173,16 @@ export default function Dashboard() {
 							<Text style={styles.subStatDisplay}>
 								{metrics.totalMiles.toFixed(1)} mi
 							</Text>
+						</View>
+						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Total Active Time</Text>
+							<Text style={styles.subStatDisplay}>
+								{metrics.totalActiveTime}
+							</Text>
+						</View>
+						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Total Time</Text>
+							<Text style={styles.subStatDisplay}>{metrics.totalTime}</Text>
 						</View>
 					</View>
 				</View>

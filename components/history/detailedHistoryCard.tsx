@@ -47,6 +47,8 @@ export default function DetailedHistoryCard({
 	// TODO: create color picker function that takes into account mileage
 	function colorPicker(order: Order) {}
 
+	console.log('netHouly: ', order.pay.netHourly);
+
 	return (
 		<Modal
 			visible={visible}

@@ -20,16 +20,17 @@ function getShiftElapsedSeconds(shift: Shift, now: Date = new Date()): number {
 	// Open shift: compute elapsed from clockIn -> now
 	if (!shift.clockInTime) return 0;
 
-	const inMinutes = parseTimeToMinutes(shift.clockInTime);
-	const nowMinutes = now.getHours() * 60 + now.getMinutes();
+	const inSeconds = parseTimeToMinutes(shift.clockInTime) * 60;
+	const nowSeconds =
+		now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
 	// Handle crossing midnight
-	const elapsedMinutes =
-		nowMinutes >= inMinutes
-			? nowMinutes - inMinutes
-			: nowMinutes + 24 * 60 - inMinutes;
+	const elapsedSeconds =
+		nowSeconds >= inSeconds
+			? nowSeconds - inSeconds
+			: nowSeconds + 24 * 3600 - inSeconds;
 
-	return elapsedMinutes;
+	return elapsedSeconds;
 }
 
 export function calculateWorkDayElapsedSeconds(
@@ -64,6 +65,7 @@ export function calculateDashboardMetrics(workDay: WorkDay): DashboardMetrics {
 
 		const explicitNet = Number(order?.pay?.net);
 		if (Number.isFinite(explicitNet)) return explicitNet;
+
 		return (
 			Number(order?.pay?.gross ?? 0) -
 			Number(order?.miles ?? 0) * MILEAGE_DEDUCTION
@@ -74,6 +76,7 @@ export function calculateDashboardMetrics(workDay: WorkDay): DashboardMetrics {
 		(sum, order) => sum + orderGross(order),
 		0,
 	);
+
 	const totalNet = workDay.orders.reduce(
 		(sum, order) => sum + orderNet(order),
 		0,
@@ -85,37 +88,30 @@ export function calculateDashboardMetrics(workDay: WorkDay): DashboardMetrics {
 	);
 
 	const totalTime = calculateWorkDayElapsedSeconds(workDay.shifts);
-	const totalActiveTime = workDay.shifts.reduce(
-		(sum, shift) => sum + parseDurationToSeconds(shift.duration),
+	console.log(totalTime);
+	const totalActiveTime = workDay.orders.reduce(
+		(sum, order) => sum + parseDurationToSeconds(order.totalDuration),
 		0,
 	);
-	const totalIdleTime = Math.max(totalTime - totalActiveTime);
+	const totalIdleTime = Math.max(totalTime - totalActiveTime, 0);
 
-	const activeHourlyGross =
-		totalActiveTime > 0 ? totalGross / totalActiveTime : 0;
-
-	const activeHourlyNet = totalActiveTime > 0 ? totalNet / totalActiveTime : 0;
-
-	const overallHourlyGross = totalTime > 0 ? totalGross / totalTime : 0;
-	const overallHourlyNet = totalTime > 0 ? totalNet / totalTime : 0;
+	const totalActiveHours = totalActiveTime / 3600;
+	const totalHours = totalTime / 3600;
 
 	const calculatedMetrics: DashboardMetrics = {
 		totalGross,
-		totalActiveHourlyGross: activeHourlyGross,
-		totalOverallHourlyGross: overallHourlyGross,
 		totalNet,
-		totalActiveHourlyNet: activeHourlyNet,
-		totalOverallHourlyNet: overallHourlyNet,
 		totalMiles,
 		totalActiveTime: secondsToHHMMSS(totalActiveTime),
 		totalIdleTime: secondsToHHMMSS(totalIdleTime),
-		totalTime: calculateWorkDayElapsedHHMMSS(workDay.shifts),
+		totalTime: secondsToHHMMSS(totalTime),
+		totalActiveHourlyGross:
+			totalActiveHours > 0 ? totalGross / totalActiveHours : 0,
+		totalActiveHourlyNet:
+			totalActiveHours > 0 ? totalNet / totalActiveHours : 0,
+		totalOverallHourlyGross: totalHours > 0 ? totalGross / totalHours : 0,
+		totalOverallHourlyNet: totalHours > 0 ? totalNet / totalHours : 0,
 	};
-
-	// CACLULATE METRICS
-
-	// Check if on active shift.
-	// total time should include completed shifts for the day, plus the current duration of the active shift
 
 	return calculatedMetrics;
 }
