@@ -62,6 +62,8 @@ function calculateHourlyNet(
 	return estimatedNet / hours;
 }
 
+// TODO: clean up unused states
+
 export default function LiveTracker() {
 	const trackingStore = liveTracking(); // loads the live tracking (individual order)
 	const dayStore = workDay(); // loads the workDay (day, shift, orders, etc...)

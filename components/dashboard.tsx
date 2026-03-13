@@ -12,9 +12,6 @@ import colors from '@/constants/Colors';
 
 import { calculateDashboardMetrics } from '@/helpers/statCalculations';
 
-// TODO: Dashboard updates:
-//		- Dashboard only displays stats from current day (history page can display summary of multiple days)
-
 export default function Dashboard() {
 	const dayStore = useMemo(() => workDay(), []);
 	const trackingStore = useMemo(() => liveTracking(), []);
@@ -147,17 +144,8 @@ export default function Dashboard() {
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Idle Time</Text>
-							<Text style={styles.subStatDisplay}>{metrics.totalIdleTime}</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Active Hourly Net</Text>
-							<Text style={[styles.subStatDisplay, { color: colors.net }]}>
-								$
-								{isFinite(metrics.totalActiveHourlyNet)
-									? metrics.totalActiveHourlyNet.toFixed(2)
-									: '0.00'}
-							</Text>
+							<Text style={styles.label}>Total Time</Text>
+							<Text style={styles.subStatDisplay}>{metrics.totalTime}</Text>
 						</View>
 						<View style={styles.subStatBox}>
 							<Text style={styles.label}>Active Hourly Gross</Text>
@@ -169,9 +157,12 @@ export default function Dashboard() {
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Miles</Text>
-							<Text style={styles.subStatDisplay}>
-								{metrics.totalMiles.toFixed(1)} mi
+							<Text style={styles.label}>Active Hourly Net</Text>
+							<Text style={[styles.subStatDisplay, { color: colors.net }]}>
+								$
+								{isFinite(metrics.totalActiveHourlyNet)
+									? metrics.totalActiveHourlyNet.toFixed(2)
+									: '0.00'}
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
@@ -181,8 +172,14 @@ export default function Dashboard() {
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Time</Text>
-							<Text style={styles.subStatDisplay}>{metrics.totalTime}</Text>
+							<Text style={styles.label}>Total Miles</Text>
+							<Text style={styles.subStatDisplay}>
+								{metrics.totalMiles.toFixed(1)} mi
+							</Text>
+						</View>
+						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Total Idle Time</Text>
+							<Text style={styles.subStatDisplay}>{metrics.totalIdleTime}</Text>
 						</View>
 					</View>
 				</View>
