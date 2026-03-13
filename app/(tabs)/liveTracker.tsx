@@ -16,7 +16,7 @@ import ClockInOut from '@/components/inputs/clockInOut';
 import colors from '@/constants/Colors';
 
 import { TotalPay, Shift, WorkDay } from '@/types/workday';
-import Order, { Timestamps, Segments, Pay } from '@/types/order';
+import { Order, Timestamps, Segments, Pay } from '@/types/order';
 
 import {
 	liveTracking,
