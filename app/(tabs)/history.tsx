@@ -144,6 +144,8 @@ export default function History() {
 
 	const hasSelectedFilter = selectedFilterId !== null;
 
+	console.log(filteredOrders);
+
 	return (
 		<SafeAreaView style={styles.safe}>
 			<ScrollView>

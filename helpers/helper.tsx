@@ -1,6 +1,5 @@
 import { Shift, TotalPay, WorkDay } from '@/types/workday';
-import ActiveOrder from '@/types/order';
-import Order from '@/types/order';
+import { Order } from '@/types/order';
 import { DashboardMetrics } from '@/types/dashboardmetrics';
 
 import MILEAGE_DEDUCTION from '@/constants/Values';
@@ -206,6 +205,8 @@ export function calculateDashboardMetrics(
 		totalOverallHourlyGross: totalGross / totalHours,
 		totalOverallHourlyNet: totalNet / totalHours,
 	};
+
+	console.log(dashboardMetrics.totalOverallHourlyNet);
 
 	return dashboardMetrics;
 }

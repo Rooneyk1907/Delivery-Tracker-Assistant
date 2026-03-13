@@ -1,35 +1,120 @@
-import { useEffect, useState } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { StyleSheet, View, Text } from 'react-native';
-import { DashboardMetrics } from '@/types/dashboardmetrics';
 
-import { workDay } from '@/hooks/useStorage';
+import { DashboardMetrics } from '@/types/dashboardmetrics';
+import { WorkDay } from '@/types/workday';
+import { Order } from '@/types/order';
+
+import { workDay, liveTracking } from '@/hooks/useStorage';
 
 import colors from '@/constants/Colors';
-import { calculateDashboardMetrics } from '@/helpers/helper';
+
+import { calculateDashboardMetrics } from '@/helpers/statCalculations';
 
 export default function Dashboard() {
-	const dayStore = workDay();
-	const { loadAll } = dayStore;
+	const dayStore = useMemo(() => workDay(), []);
+	const trackingStore = useMemo(() => liveTracking(), []);
+	const { getWorkDay } = dayStore;
+	const { load: loadActiveTracking } = trackingStore;
 
 	const [isLoading, setIsLoading] = useState(true);
 	const [metrics, setMetrics] = useState<DashboardMetrics>();
+	const [todayData, setTodayData] = useState<WorkDay>();
 
-	useEffect(() => {
-		(async () => {
-			const workDays = await loadAll();
+	const inFlightRef = useRef(false);
 
-			if (workDays) {
-				const calculated = calculateDashboardMetrics(workDays);
+	const refreshDashboard = useCallback(async () => {
+		if (inFlightRef.current) return;
+		inFlightRef.current = true;
 
-				setMetrics(calculated);
+		try {
+			const today = new Date().toISOString().slice(0, 10);
+			const day = await getWorkDay(today);
+
+			if (!day) {
+				setTodayData(undefined);
+				setMetrics(undefined);
 				setIsLoading(false);
+				return;
 			}
-		})();
-	}, []);
+
+			let dayForMetrics: WorkDay = day;
+			const active = await loadActiveTracking();
+
+			if (active && active.date === today) {
+				const elapsedSeconds = Math.max(
+					0,
+					Math.floor((Date.now() - active.startMs) / 1000),
+				);
+
+				const hours = elapsedSeconds / 3600;
+
+				const liveOrder: Order = {
+					id: active.id,
+					date: active.date,
+					service: active.service,
+					restaurant: active.restaurant,
+					miles: active.miles,
+					timestamps: active.timestamps,
+					segments: active.segments,
+					totalDuration: elapsedSeconds,
+					pay: {
+						gross: active.pay.gross,
+						net: active.pay.net,
+						grossHourly: hours > 0 ? active.pay.gross / hours : 0,
+						netHourly: hours > 0 ? active.pay.net / hours : 0,
+					},
+				};
+
+				dayForMetrics = {
+					...day,
+					orders: [
+						...day.orders.filter((order) => order.id !== liveOrder.id),
+						liveOrder,
+					],
+				};
+			}
+
+			setTodayData(dayForMetrics);
+			setMetrics(calculateDashboardMetrics(dayForMetrics));
+			setIsLoading(false);
+		} catch (error) {
+			console.error('Dashboard refresh failed', error);
+			setIsLoading(false);
+		} finally {
+			inFlightRef.current = false;
+		}
+	}, [getWorkDay, loadActiveTracking]);
+
+	useFocusEffect(
+		useCallback(() => {
+			let active = true;
+			let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+			const loop = async () => {
+				if (!active) return;
+				await refreshDashboard();
+				if (!active) return;
+				timeoutId = setTimeout(loop, 1000);
+			};
+
+			void loop();
+
+			return () => {
+				active = false;
+				if (timeoutId) clearTimeout(timeoutId);
+			};
+		}, [refreshDashboard]),
+	);
 
 	return (
 		<>
-			{metrics !== undefined && !isLoading ? (
+			{isLoading ? (
+				<Text style={{ color: colors.labelText, textAlign: 'center' }}>
+					Loading...
+				</Text>
+			) : todayData && metrics ? (
 				<View style={styles.dashboardWrapper}>
 					<Text style={styles.dashboardTitle}>Dashboard</Text>
 					<View style={styles.primaryStatBox}>
@@ -59,17 +144,8 @@ export default function Dashboard() {
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Total Idle Time</Text>
-							<Text style={styles.subStatDisplay}>{metrics.totalIdleTime}</Text>
-						</View>
-						<View style={styles.subStatBox}>
-							<Text style={styles.label}>Active Hourly Net</Text>
-							<Text style={[styles.subStatDisplay, { color: colors.net }]}>
-								$
-								{isFinite(metrics.totalActiveHourlyNet)
-									? metrics.totalActiveHourlyNet.toFixed(2)
-									: '0.00'}
-							</Text>
+							<Text style={styles.label}>Total Time</Text>
+							<Text style={styles.subStatDisplay}>{metrics.totalTime}</Text>
 						</View>
 						<View style={styles.subStatBox}>
 							<Text style={styles.label}>Active Hourly Gross</Text>
@@ -81,19 +157,36 @@ export default function Dashboard() {
 							</Text>
 						</View>
 						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Active Hourly Net</Text>
+							<Text style={[styles.subStatDisplay, { color: colors.net }]}>
+								$
+								{isFinite(metrics.totalActiveHourlyNet)
+									? metrics.totalActiveHourlyNet.toFixed(2)
+									: '0.00'}
+							</Text>
+						</View>
+						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Total Active Time</Text>
+							<Text style={styles.subStatDisplay}>
+								{metrics.totalActiveTime}
+							</Text>
+						</View>
+						<View style={styles.subStatBox}>
 							<Text style={styles.label}>Total Miles</Text>
 							<Text style={styles.subStatDisplay}>
 								{metrics.totalMiles.toFixed(1)} mi
 							</Text>
 						</View>
+						<View style={styles.subStatBox}>
+							<Text style={styles.label}>Total Idle Time</Text>
+							<Text style={styles.subStatDisplay}>{metrics.totalIdleTime}</Text>
+						</View>
 					</View>
 				</View>
 			) : (
-				<>
-					<Text style={{ color: colors.labelText, textAlign: 'center' }}>
-						Loading...
-					</Text>
-				</>
+				<Text style={{ color: colors.labelText, textAlign: 'center' }}>
+					No data for today
+				</Text>
 			)}
 		</>
 	);
