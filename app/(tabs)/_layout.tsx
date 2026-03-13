@@ -65,7 +65,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name='iportExport'
+				name='exportImport'
 				options={{
 					title: 'Import/Export',
 					tabBarButton: (props) => (
