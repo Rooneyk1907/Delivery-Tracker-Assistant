@@ -40,6 +40,7 @@ import {
 // TODO: Services should be input by user in settings and saved to .env file
 const SERVICES = ['GrubHub', 'DoorDash', 'UberEats'];
 
+// TODO: Inputs should be greyed out and disabled while on a delivery.
 function calculateHourlyGross(payAmount: number, elapsedMs: number): number {
 	if (elapsedMs === 0) return 0;
 	const hours = elapsedMs / (1000 * 60 * 60);
