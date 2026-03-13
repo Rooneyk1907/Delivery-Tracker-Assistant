@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
+import JSZip from 'jszip';
 
 import { useState } from 'react';
 
@@ -22,115 +23,99 @@ import type { Shift } from '@/types/workday';
 
 const LONG_TERM_STORAGE_KEY = '@long_term_storage';
 
-const STORAGE_KEYS = [
-	'@long_term_storage',
-	'@temp_storage_live_tracking',
-	'@temp_storage_order_entry_draft',
-] as const;
-
-type ExportRow = {
-	key: string;
-	json: string;
+type WorkDayCsvRow = {
+	id: string;
+	date: string;
+	saved_at: string;
+	total_time: string;
+	active_time: string;
+	idle_time: string;
+	shift_count: string;
+	shifts: string;
+	total_gross: string;
+	total_net: string;
+	active_hourly_gross: string;
+	active_hourly_net: string;
+	overall_hourly_gross: string;
+	overall_hourly_net: string;
 };
 
-type CsvRow = {
+type OrderCsvRow = {
 	workday_id: string;
 	workday_date: string;
-	workday_saved_at: string;
-	workday_total_time: string;
-	workday_active_time: string;
-	workday_idle_time: string;
-	workday_shift_count: string;
-	workday_shifts: string; // HH:MM-HH:MM(duration);...
-	workday_total_gross: string;
-	workday_total_net: string;
-	workday_active_hourly_gross: string;
-	workday_active_hourly_net: string;
-	workday_overall_hourly_gross: string;
-	workday_overall_hourly_net: string;
-
 	order_id: string;
-	order_service: string;
-	order_restaurant: string;
-	order_miles: string;
-	order_start_time: string;
-	order_rest_arrival_time: string;
-	order_rest_departure_time: string;
-	order_delivery_time: string;
-	order_end_deadhead_time: string;
-	order_to_restaurant: string;
-	order_at_restaurant: string;
-	order_to_customer: string;
-	order_return_to_hotspot: string;
-	order_total_duration: string;
-	order_pay_gross: string;
-	order_pay_net: string;
-	order_pay_gross_hourly: string;
-	order_pay_net_hourly: string;
+	service: string;
+	restaurant: string;
+	miles: string;
+	start_time: string;
+	rest_arrival_time: string;
+	rest_departure_time: string;
+	delivery_time: string;
+	end_deadhead_time: string;
+	to_restaurant: string;
+	at_restaurant: string;
+	to_customer: string;
+	return_to_hotspot: string;
+	total_duration: string;
+	pay_gross: string;
+	pay_net: string;
+	pay_gross_hourly: string;
+	pay_net_hourly: string;
 };
 
-const CSV_COLUMNS: (keyof CsvRow)[] = [
+const WORKDAY_COLUMNS: (keyof WorkDayCsvRow)[] = [
+	'id',
+	'date',
+	'saved_at',
+	'total_time',
+	'active_time',
+	'idle_time',
+	'shift_count',
+	'shifts',
+	'total_gross',
+	'total_net',
+	'active_hourly_gross',
+	'active_hourly_net',
+	'overall_hourly_gross',
+	'overall_hourly_net',
+];
+
+const ORDER_COLUMNS: (keyof OrderCsvRow)[] = [
 	'workday_id',
 	'workday_date',
-	'workday_saved_at',
-	'workday_total_time',
-	'workday_active_time',
-	'workday_idle_time',
-	'workday_shift_count',
-	'workday_shifts',
-	'workday_total_gross',
-	'workday_total_net',
-	'workday_active_hourly_gross',
-	'workday_active_hourly_net',
-	'workday_overall_hourly_gross',
-	'workday_overall_hourly_net',
 	'order_id',
-	'order_service',
-	'order_restaurant',
-	'order_miles',
-	'order_start_time',
-	'order_rest_arrival_time',
-	'order_rest_departure_time',
-	'order_delivery_time',
-	'order_end_deadhead_time',
-	'order_to_restaurant',
-	'order_at_restaurant',
-	'order_to_customer',
-	'order_return_to_hotspot',
-	'order_total_duration',
-	'order_pay_gross',
-	'order_pay_net',
-	'order_pay_gross_hourly',
-	'order_pay_net_hourly',
+	'service',
+	'restaurant',
+	'miles',
+	'start_time',
+	'rest_arrival_time',
+	'rest_departure_time',
+	'delivery_time',
+	'end_deadhead_time',
+	'to_restaurant',
+	'at_restaurant',
+	'to_customer',
+	'return_to_hotspot',
+	'total_duration',
+	'pay_gross',
+	'pay_net',
+	'pay_gross_hourly',
+	'pay_net_hourly',
 ];
 
 function csvEscape(value: string): string {
 	return `"${(value ?? '').replace(/"/g, '""')}"`;
 }
 
-function parseCsvLine(line: string): string[] {
-	const out: string[] = [];
-	let cur = '';
-	let inQuotes = false;
-
-	for (let i = 0; i < line.length; i++) {
-		const ch = line[i];
-		if (ch === '"') {
-			if (inQuotes && line[i + 1] === '"') {
-				cur += '"';
-				i++;
-			} else {
-				inQuotes = !inQuotes;
-			}
-		} else if (ch === ',' && !inQuotes) {
-			out.push(cur);
-			cur = '';
-		} else {
-			cur += ch;
-		}
-	}
-	out.push(cur);
-	return out;
+function rowsToCsv<T extends Record<string, string>>(
+	columns: (keyof T)[],
+	rows: T[],
+): string {
+	const header = columns.join(',');
+	const body = rows.map((row) => {
+		return columns.map((c) => csvEscape(String(row[c] ?? ''))).join(',');
+	});
+	return [header, ...body].join('\n');
 }
 
 function serializeShifts(shifts: Shift[]): string {
@@ -158,199 +143,136 @@ function deserializeShifts(raw: string): Shift[] {
 	});
 }
 
-function toCsv(rows: ExportRow[]): string {
-	const header = 'key.json';
-	const body = rows.map(
-		(row) => `${csvEscape(row.key)},${csvEscape(row.json)}`,
-	);
-	return [header, ...body].join('\n');
+function workDaysToCsv(workDays: StoredDay[]): string {
+	const rows: WorkDayCsvRow[] = workDays.map((day) => ({
+		id: day.id ?? '',
+		date: day.date ?? '',
+		saved_at: day.savedAt ?? '',
+		total_time: day.totalTime ?? '',
+		active_time: day.activeTime ?? '',
+		idle_time: day.idleTime ?? '',
+		shift_count: String(day.shifts?.length ?? 0),
+		shifts: serializeShifts(day.shifts ?? []),
+		total_gross: String(day.totalPay?.gross ?? 0),
+		total_net: String(day.totalPay?.net ?? 0),
+		active_hourly_gross: String(day.totalPay?.activeHourlyGross ?? 0),
+		active_hourly_net: String(day.totalPay?.activeHourlyNet ?? 0),
+		overall_hourly_gross: String(day.totalPay?.overallHourlyGross ?? 0),
+		overall_hourly_net: String(day.totalPay?.overallHourlyNet ?? 0),
+	}));
+	return rowsToCsv(WORKDAY_COLUMNS, rows);
 }
 
-function parseCsv(csv: string): ExportRow[] {
-	const lines = csv.split(/\r?\n/).filter((line) => line.trim().length > 0);
-	if (lines.length <= 1) return [];
-
-	return lines.slice(1).map((line) => {
-		const commaIndex = line.indexOf(',');
-		if (commaIndex === -1) throw new Error(`Invalid CSV line: ${line}`);
-
-		const rawKey = line.slice(0, commaIndex).trim();
-		const rawJson = line.slice(commaIndex + 1).trim();
-
-		const unquote = (value: string) => {
-			let out = value;
-			if (out.startsWith('"') && out.endsWith('"')) {
-				out = out.slice(1, -1);
-			}
-			return out.replace(/""/g, '"');
-		};
-
-		return {
-			key: unquote(rawKey),
-			json: unquote(rawJson),
-		};
-	});
-}
-
-function workDaysToCsv(workDays: any[]): string {
-	const header = CSV_COLUMNS.join(',');
-
-	const rows = workDays.flatMap((day) => {
-		const base = {
+function ordersToCsv(workDays: StoredDay[]): string {
+	const rows: OrderCsvRow[] = workDays.flatMap((day) =>
+		(day.orders ?? []).map((o) => ({
 			workday_id: day.id ?? '',
 			workday_date: day.date ?? '',
-			workday_saved_at: day.savedAt ?? '',
-			workday_total_time: day.totalTime ?? '',
-			workday_active_time: day.activeTime ?? '',
-			workday_idle_time: day.idleTime ?? '',
-			workday_shift_count: String(day.shifts?.length ?? 0),
-			workday_shifts: serializeShifts(day.shifts ?? []),
-			workday_total_gross: String(day.totalPay?.gross ?? 0),
-			workday_total_net: String(day.totalPay?.net ?? 0),
-			workday_active_hourly_gross: String(day.totalPay?.activeHourlyGross ?? 0),
-			workday_active_hourly_net: String(day.totalPay?.activeHourlyNet ?? 0),
-			workday_overall_hourly_gross: String(
-				day.totalPay?.overallHourlyGross ?? 0,
-			),
-			workday_overall_hourly_net: String(day.totalPay?.overallHourlyNet ?? 0),
-		};
-
-		if (!day.orders?.length) {
-			const emptyOrder = {
-				order_id: '',
-				order_service: '',
-				order_restaurant: '',
-				order_miles: '',
-				order_start_time: '',
-				order_rest_arrival_time: '',
-				order_rest_departure_time: '',
-				order_delivery_time: '',
-				order_end_deadhead_time: '',
-				order_to_restaurant: '',
-				order_at_restaurant: '',
-				order_to_customer: '',
-				order_return_to_hotspot: '',
-				order_total_duration: '',
-				order_pay_gross: '',
-				order_pay_net: '',
-				order_pay_gross_hourly: '',
-				order_pay_net_hourly: '',
-			};
-			return [{ ...base, ...emptyOrder }];
-		}
-
-		return day.orders.map((o: any) => ({
-			...base,
 			order_id: o.id ?? '',
-			order_service: o.service ?? '',
-			order_restaurant: o.restaurant ?? '',
-			order_miles: String(o.miles ?? 0),
-			order_start_time: o.timestamps?.startTime ?? '',
-			order_rest_arrival_time: o.timestamps?.restArrivalTime ?? '',
-			order_rest_departure_time: o.timestamps?.restDepartureTime ?? '',
-			order_delivery_time: o.timestamps?.deliveryTime ?? '',
-			order_end_deadhead_time: o.timestamps?.endDeadheadTime ?? '',
-			order_to_restaurant: String(o.segments?.toRestaurant ?? 0),
-			order_at_restaurant: String(o.segments?.atRestaurant ?? 0),
-			order_to_customer: String(o.segments?.toCustomer ?? 0),
-			order_return_to_hotspot: String(o.segments?.returnToHotspot ?? 0),
-			order_total_duration: String(o.totalDuration ?? 0),
-			order_pay_gross: String(o.pay?.gross ?? 0),
-			order_pay_net: String(o.pay?.net ?? 0),
-			order_pay_gross_hourly: String(o.pay?.grossHourly ?? 0),
-			order_pay_net_hourly: String(o.pay?.netHourly ?? 0),
-		}));
-	});
-
-	const body = rows.map((row) =>
-		CSV_COLUMNS.map((c) => csvEscape(String(row[c] ?? ''))).join(','),
+			service: o.service ?? '',
+			restaurant: o.restaurant ?? '',
+			miles: String(o.miles ?? 0),
+			start_time: o.timestamps?.startTime ?? '',
+			rest_arrival_time: o.timestamps?.restArrivalTime ?? '',
+			rest_departure_time: o.timestamps?.restDepartureTime ?? '',
+			delivery_time: o.timestamps?.deliveryTime ?? '',
+			end_deadhead_time: o.timestamps?.endDeadheadTime ?? '',
+			to_restaurant: String(o.segments?.toRestaurant ?? 0),
+			at_restaurant: String(o.segments?.atRestaurant ?? 0),
+			to_customer: String(o.segments?.toCustomer ?? 0),
+			return_to_hotspot: String(o.segments?.returnToHotspot ?? 0),
+			total_duration: String(o.totalDuration ?? 0),
+			pay_gross: String(o.pay?.gross ?? 0),
+			pay_net: String(o.pay?.net ?? 0),
+			pay_gross_hourly: String(o.pay?.grossHourly ?? 0),
+			pay_net_hourly: String(o.pay?.netHourly ?? 0),
+		})),
 	);
 
-	return [header, ...body].join('\n');
+	return rowsToCsv(ORDER_COLUMNS, rows);
 }
 
-function csvToWorkDays(csv: string): any[] {
-	const lines = csv.split(/\r?\n/).filter((l) => l.trim().length > 0);
-	if (lines.length < 2) return [];
+// function csvToWorkDays(csv: string): any[] {
+// 	const lines = csv.split(/\r?\n/).filter((l) => l.trim().length > 0);
+// 	if (lines.length < 2) return [];
 
-	const header = parseCsvLine(lines[0]);
-	const idx = Object.fromEntries(header.map((h, i) => [h, i]));
+// 	const header = parseCsvLine(lines[0]);
+// 	const idx = Object.fromEntries(header.map((h, i) => [h, i]));
 
-	const get = (cells: string[], key: keyof CsvRow) => cells[idx[key]] ?? '';
+// 	const get = (cells: string[], key: keyof CsvRow) => cells[idx[key]] ?? '';
 
-	const days = new Map<string, any>();
+// 	const days = new Map<string, any>();
 
-	for (const line of lines.slice(1)) {
-		const cells = parseCsvLine(line);
-		const workdayId = get(cells, 'workday_id');
-		if (!workdayId) continue;
+// 	for (const line of lines.slice(1)) {
+// 		const cells = parseCsvLine(line);
+// 		const workdayId = get(cells, 'workday_id');
+// 		if (!workdayId) continue;
 
-		let day = days.get(workdayId);
-		if (!day) {
-			day = {
-				id: workdayId,
-				date: get(cells, 'workday_date'),
-				savedAt: get(cells, 'workday_saved_at'),
-				totalTime: get(cells, 'workday_total_time'),
-				activeTime: get(cells, 'workday_active_time'),
-				idleTime: get(cells, 'workday_idle_time'),
-				shifts: deserializeShifts(get(cells, 'workday_shifts')),
-				totalPay: {
-					gross: Number(get(cells, 'workday_total_gross')) || 0,
-					net: Number(get(cells, 'workday_total_net')) || 0,
-					activeHourlyGross:
-						Number(get(cells, 'workday_active_hourly_gross')) || 0,
-					activeHourlyNet: Number(get(cells, 'workday_active_hourly_net')) || 0,
-					overallHourlyGross:
-						Number(get(cells, 'workday_overall_hourly_gross')) || 0,
-					overallHourlyNet:
-						Number(get(cells, 'workday_overall_hourly_net')) || 0,
-				},
-				orders: [],
-			};
-			days.set(workdayId, day);
-		}
+// 		let day = days.get(workdayId);
+// 		if (!day) {
+// 			day = {
+// 				id: workdayId,
+// 				date: get(cells, 'workday_date'),
+// 				savedAt: get(cells, 'workday_saved_at'),
+// 				totalTime: get(cells, 'workday_total_time'),
+// 				activeTime: get(cells, 'workday_active_time'),
+// 				idleTime: get(cells, 'workday_idle_time'),
+// 				shifts: deserializeShifts(get(cells, 'workday_shifts')),
+// 				totalPay: {
+// 					gross: Number(get(cells, 'workday_total_gross')) || 0,
+// 					net: Number(get(cells, 'workday_total_net')) || 0,
+// 					activeHourlyGross:
+// 						Number(get(cells, 'workday_active_hourly_gross')) || 0,
+// 					activeHourlyNet: Number(get(cells, 'workday_active_hourly_net')) || 0,
+// 					overallHourlyGross:
+// 						Number(get(cells, 'workday_overall_hourly_gross')) || 0,
+// 					overallHourlyNet:
+// 						Number(get(cells, 'workday_overall_hourly_net')) || 0,
+// 				},
+// 				orders: [],
+// 			};
+// 			days.set(workdayId, day);
+// 		}
 
-		const orderId = get(cells, 'order_id');
-		if (orderId) {
-			day.orders.push({
-				id: orderId,
-				date: get(cells, 'workday_date'),
-				service: get(cells, 'order_service'),
-				restaurant: get(cells, 'order_restaurant'),
-				miles: Number(get(cells, 'order_miles')) || 0,
-				timestamps: {
-					startTime: get(cells, 'order_start_time'),
-					restArrivalTime: get(cells, 'order_rest_arrival_time'),
-					restDepartureTime: get(cells, 'order_rest_departure_time'),
-					deliveryTime: get(cells, 'order_delivery_time'),
-					endDeadheadTime: get(cells, 'order_end_deadhead_time'),
-				},
-				segments: {
-					toRestaurant: Number(get(cells, 'order_to_restaurant')) || 0,
-					atRestaurant: Number(get(cells, 'order_at_restaurant')) || 0,
-					toCustomer: Number(get(cells, 'order_to_customer')) || 0,
-					returnToHotspot: Number(get(cells, 'order_return_to_hotspot')) || 0,
-				},
-				totalDuration: Number(get(cells, 'order_total_duration')) || 0,
-				pay: {
-					gross: Number(get(cells, 'order_pay_gross')) || 0,
-					net: Number(get(cells, 'order_pay_net')) || 0,
-					grossHourly: Number(get(cells, 'order_pay_gross_hourly')) || 0,
-					netHourly: Number(get(cells, 'order_pay_net_hourly')) || 0,
-				},
-			});
-		}
-	}
+// 		const orderId = get(cells, 'order_id');
+// 		if (orderId) {
+// 			day.orders.push({
+// 				id: orderId,
+// 				date: get(cells, 'workday_date'),
+// 				service: get(cells, 'order_service'),
+// 				restaurant: get(cells, 'order_restaurant'),
+// 				miles: Number(get(cells, 'order_miles')) || 0,
+// 				timestamps: {
+// 					startTime: get(cells, 'order_start_time'),
+// 					restArrivalTime: get(cells, 'order_rest_arrival_time'),
+// 					restDepartureTime: get(cells, 'order_rest_departure_time'),
+// 					deliveryTime: get(cells, 'order_delivery_time'),
+// 					endDeadheadTime: get(cells, 'order_end_deadhead_time'),
+// 				},
+// 				segments: {
+// 					toRestaurant: Number(get(cells, 'order_to_restaurant')) || 0,
+// 					atRestaurant: Number(get(cells, 'order_at_restaurant')) || 0,
+// 					toCustomer: Number(get(cells, 'order_to_customer')) || 0,
+// 					returnToHotspot: Number(get(cells, 'order_return_to_hotspot')) || 0,
+// 				},
+// 				totalDuration: Number(get(cells, 'order_total_duration')) || 0,
+// 				pay: {
+// 					gross: Number(get(cells, 'order_pay_gross')) || 0,
+// 					net: Number(get(cells, 'order_pay_net')) || 0,
+// 					grossHourly: Number(get(cells, 'order_pay_gross_hourly')) || 0,
+// 					netHourly: Number(get(cells, 'order_pay_net_hourly')) || 0,
+// 				},
+// 			});
+// 		}
+// 	}
 
-	return Array.from(days.values());
-}
+// 	return Array.from(days.values());
+// }
 
-async function downloadCsvOnWeb(csv: string, fileName: string) {
+async function downloadBlobOnWeb(blob: Blob, fileName: string) {
 	const webDoc = (globalThis as any).document;
 	if (!webDoc) throw new Error('Browser document API is unavailable');
 
-	const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 	const url = URL.createObjectURL(blob);
 	const a = webDoc.createElement('a');
 	a.href = url;
@@ -381,6 +303,114 @@ async function readCsvFromPickedFile(
 	});
 }
 
+function parseCsvLine(line: string): string[] {
+	const out: string[] = [];
+	let cur = '';
+	let inQuotes = false;
+
+	for (let i = 0; i < line.length; i++) {
+		const ch = line[i];
+		if (ch === '"') {
+			if (inQuotes && line[i + 1] === '"') {
+				cur += '"';
+				i++;
+			} else {
+				inQuotes = !inQuotes;
+			}
+		} else if (ch === ',' && !inQuotes) {
+			out.push(cur);
+			cur = '';
+		} else {
+			cur += ch;
+		}
+	}
+	out.push(cur);
+	return out;
+}
+
+function parseCsvRows<T extends Record<string, string>>(csv: string): T[] {
+	const lines = csv.split(/\r?\n/).filter((l) => l.trim().length > 0);
+	if (lines.length < 2) return [];
+
+	const headers = parseCsvLine(lines[0]);
+
+	return lines.slice(1).map((line) => {
+		const cells = parseCsvLine(line);
+		const row: Record<string, string> = {};
+		headers.forEach((h, i) => {
+			row[h] = cells[i] ?? '';
+		});
+		return row as T;
+	});
+}
+
+function csvFilesToWorkDays(
+	workdaysCsv: string,
+	ordersCsv: string,
+): StoredDay[] {
+	const workdayRows = parseCsvRows<WorkDayCsvRow>(workdaysCsv);
+	const orderRows = parseCsvRows<OrderCsvRow>(ordersCsv);
+
+	const dayMap = new Map<string, StoredDay>();
+
+	for (const r of workdayRows) {
+		dayMap.set(r.id, {
+			id: r.id,
+			date: r.date,
+			savedAt: r.saved_at,
+			totalTime: r.total_time,
+			activeTime: r.active_time,
+			idleTime: r.idle_time,
+			shifts: deserializeShifts(r.shifts),
+			totalPay: {
+				gross: Number(r.total_gross) || 0,
+				net: Number(r.total_net) || 0,
+				activeHourlyGross: Number(r.active_hourly_gross) || 0,
+				activeHourlyNet: Number(r.active_hourly_net) || 0,
+				overallHourlyGross: Number(r.overall_hourly_gross) || 0,
+				overallHourlyNet: Number(r.overall_hourly_net) || 0,
+			},
+			orders: [],
+		});
+	}
+
+	for (const r of orderRows) {
+		if (!r.order_id) continue;
+		const day = dayMap.get(r.workday_id);
+		if (!day) continue;
+
+		day.orders.push({
+			id: r.order_id,
+			date: r.workday_date || day.date,
+			service: r.service,
+			restaurant: r.restaurant,
+			miles: Number(r.miles) || 0,
+			timestamps: {
+				startTime: r.start_time,
+				restArrivalTime: r.rest_arrival_time,
+				restDepartureTime: r.rest_departure_time,
+				deliveryTime: r.delivery_time,
+				endDeadheadTime: r.end_deadhead_time,
+			},
+			segments: {
+				toRestaurant: Number(r.to_restaurant) || 0,
+				atRestaurant: Number(r.at_restaurant) || 0,
+				toCustomer: Number(r.to_customer) || 0,
+				returnToHotspot: Number(r.return_to_hotspot) || 0,
+			},
+			totalDuration: Number(r.total_duration) || 0,
+			pay: {
+				gross: Number(r.pay_gross) || 0,
+				net: Number(r.pay_net) || 0,
+				grossHourly: Number(r.pay_gross_hourly) || 0,
+				netHourly: Number(r.pay_net_hourly) || 0,
+			},
+		});
+	}
+
+	return Array.from(dayMap.values());
+}
+
 export default function ExportImport() {
 	const [status, setStatus] = useState<string>('');
 
@@ -391,24 +421,33 @@ export default function ExportImport() {
 			const raw = await AsyncStorage.getItem(LONG_TERM_STORAGE_KEY);
 			const workDays: StoredDay[] = raw ? (JSON.parse(raw) as StoredDay[]) : [];
 
-			const csv = workDaysToCsv(workDays);
-			const fileName = `delivery-tracker-export-${new Date().toISOString().slice(0, 10)}.csv`;
+			const workDaysCsv = workDaysToCsv(workDays);
+			const ordersCsv = ordersToCsv(workDays);
+
+			const zip = new JSZip();
+			zip.file('workdays.csv', workDaysCsv);
+			zip.file('orders.csv', ordersCsv);
+
+			const datePart = new Date().toISOString().slice(0, 10);
+			const zipName = `delivery-tracker-export-${datePart}.zip`;
 
 			if (Platform.OS === 'web') {
-				await downloadCsvOnWeb(csv, fileName);
+				const blob = await zip.generateAsync({ type: 'blob' });
+				await downloadBlobOnWeb(blob, zipName);
 			} else {
-				const fileUri = `${FileSystem.cacheDirectory}${fileName}`;
+				const base64Zip = await zip.generateAsync({ type: 'base64' });
+				const fileUri = `${FileSystem.cacheDirectory}${zipName}`;
 
-				await FileSystem.writeAsStringAsync(fileUri, csv, {
-					encoding: FileSystem.EncodingType.UTF8,
+				await FileSystem.writeAsStringAsync(fileUri, base64Zip, {
+					encoding: FileSystem.EncodingType.Base64,
 				});
 
 				const canShare = await Sharing.isAvailableAsync();
 				if (canShare) {
 					await Sharing.shareAsync(fileUri, {
-						mimeType: 'text/csv',
+						mimeType: 'application/zip',
 						dialogTitle: 'Export Delivery Tracker Data',
-						UTI: 'public.comma-separated-values-text',
+						UTI: 'public.zip-archive',
 					});
 				} else {
 					Alert.alert('Export complete', `CSV saved to:\n${fileUri}`);
@@ -418,7 +457,7 @@ export default function ExportImport() {
 		} catch (error) {
 			console.error('Export failed', error);
 			setStatus('Export failed.');
-			Alert.alert('Export failed', 'Could not export data to CSV');
+			Alert.alert('Export failed', 'Could not export ZIP');
 		}
 	};
 
@@ -427,7 +466,7 @@ export default function ExportImport() {
 			setStatus('Choosing file...');
 
 			const result = await DocumentPicker.getDocumentAsync({
-				type: ['text/csv', 'text/comma-separated-values', 'text/plain'],
+				type: ['application/zip', 'application/x-zip-compressed'],
 				copyToCacheDirectory: true,
 				multiple: false,
 			});
@@ -438,10 +477,37 @@ export default function ExportImport() {
 			}
 
 			const asset = result.assets[0];
+			setStatus('Reading ZIP...');
 
-			setStatus('Reading CSV...');
-			const csv = await readCsvFromPickedFile(asset);
-			const workDays = csvToWorkDays(csv);
+			let zip: JSZip;
+			if (Platform.OS === 'web') {
+				const file = (asset as any).file as File | undefined;
+				if (file) {
+					const buffer = await file.arrayBuffer();
+					zip = await JSZip.loadAsync(buffer);
+				} else {
+					const resp = await fetch(asset.uri);
+					const buffer = await resp.arrayBuffer();
+					zip = await JSZip.loadAsync(buffer);
+				}
+			} else {
+				const base64Zip = await FileSystem.readAsStringAsync(asset.uri, {
+					encoding: FileSystem.EncodingType.Base64,
+				});
+				zip = await JSZip.loadAsync(base64Zip, { base64: true });
+			}
+
+			const workdaysEntry = zip.file('workdays.csv');
+			const ordersEntry = zip.file('orders.csv');
+
+			if (!workdaysEntry || !ordersEntry) {
+				throw new Error('ZIP must contain workdays.csv and orders.csv');
+			}
+
+			const workdaysCsv = await workdaysEntry.async('string');
+			const ordersCsv = await ordersEntry.async('string');
+
+			const workDays = csvFilesToWorkDays(workdaysCsv, ordersCsv);
 
 			setStatus('Aplying import...');
 			await AsyncStorage.setItem(
@@ -450,11 +516,14 @@ export default function ExportImport() {
 			);
 
 			setStatus('Import complete.');
-			Alert.alert('Import complete', 'WorkDay/Order data restored from CSV.');
+			Alert.alert('Import complete', 'WorkDay/Order data restored from ZIP.');
 		} catch (error) {
 			console.error('Import failed', error);
 			setStatus('Import failed.');
-			Alert.alert('Import failed', 'Could not import CSV. Check file format');
+			Alert.alert(
+				'Import failed',
+				'Could not import ZIP. ZIP must include workdays.csv and orders.csv',
+			);
 		}
 	};
 
